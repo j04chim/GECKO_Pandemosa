@@ -3,9 +3,9 @@
 #include "cppTest.h"
 
 
-MessagesTree::MessagesTree( ) {
+MessagesTree::MessagesTree() {
 
-    this->_name = new std::string( );
+    this->_name = new std::string();
 
 }
 
@@ -17,7 +17,7 @@ MessagesTree::MessagesTree( std::string name ) {
 }
 
 
-MessagesTree::~MessagesTree( ) {
+MessagesTree::~MessagesTree() {
 
     for ( std::string* m: this->_leaves ) {
 
@@ -63,14 +63,14 @@ void MessagesTree::appendMessage( std::string path, std::string message ) {
 
     MessagesTree* new_tree = new MessagesTree( name );
     new_tree->appendMessage( path, message );
-    this->_subtree.push_back(new_tree);
+    this->_subtree.push_back( new_tree );
 
     return;
 
 }
 
 
-std::string* MessagesTree::getName( ) {
+std::string* MessagesTree::getName() {
 
     return this->_name;
 
@@ -79,17 +79,23 @@ std::string* MessagesTree::getName( ) {
 
 void MessagesTree::display( std::string before ) {
 
-    for ( int i = 0; i < this->_leaves.size( ); ++i ) {
+    for ( int i = 0; i < this->_leaves.size(); ++i ) {
 
-        if ( this->_subtree.empty( ) &&
-             i == this->_leaves.size( ) - 1
+        if ( this->_subtree.empty() &&
+             i == this->_leaves.size() - 1
         ) {
 
-            printf( ( before + "\033[33m ╰╴\033[0m%s\n" ).c_str( ), this->_leaves.at( i )->c_str() );
+            printf(
+                ( before + "\033[33m ╰╴\033[0m%s\n" ).c_str(),
+                this->_leaves.at( i )->c_str()
+            );
 
         } else {
 
-            printf( ( before + "\033[33m ├╴\033[0m%s\n" ).c_str( ), this->_leaves.at( i )->c_str() );
+            printf(
+                ( before + "\033[33m ├╴\033[0m%s\n" ).c_str(),
+                this->_leaves.at( i )->c_str()
+            );
 
         }
 
@@ -99,12 +105,18 @@ void MessagesTree::display( std::string before ) {
 
         if ( i == this->_subtree.size( ) - 1 ) {
 
-            printf( ( before + "\033[33m ╰╴%s\033[0m\n" ).c_str( ), this->_subtree.at( i )->getName( )->c_str() );
+            printf(
+                ( before + "\033[33m ╰╴%s\033[0m\n" ).c_str(),
+                this->_subtree.at( i )->getName()->c_str()
+            );
             this->_subtree.at( i )->display( before + "  " );
 
         } else {
 
-            printf( ( before + "\033[33m ├╴%s\033[0m\n" ).c_str( ), this->_subtree.at( i )->getName( )->c_str() );
+            printf(
+                ( before + "\033[33m ├╴%s\033[0m\n" ).c_str(),
+                this->_subtree.at( i )->getName()->c_str()
+            );
             this->_subtree.at( i )->display( before + "\033[33m │\033[0m" );
 
         }
@@ -114,7 +126,7 @@ void MessagesTree::display( std::string before ) {
 }
 
 
-CppTest::CppTest( ) {
+CppTest::CppTest() {
 
     this->_total_tests = 0;
     this->_passed_tests = 0;
@@ -142,7 +154,7 @@ void CppTest::test( bool t, std::string path, std::string message ) {
 }
 
 
-void CppTest::display( ) {
+void CppTest::display() {
 
     printf( "\n\033[32m%d tests passed,\033[0m \033[31m%d tests failed\033[0m\n",
             this->_passed_tests,
