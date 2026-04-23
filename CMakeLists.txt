@@ -11,7 +11,12 @@ add_executable( Kausjan )
 
 target_sources( Kausjan
     PRIVATE
-        src/main.cpp
+        src/App.cpp
+        src/Session.cpp
+        src/Note.cpp
+        src/Event.cpp
+        src/Database.cpp
+        src/drivers/Sqlite.cpp
 )
 
 target_include_directories( Kausjan

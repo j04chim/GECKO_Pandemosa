@@ -1,7 +1,7 @@
 #include <vector>
 #include <string>
 
-/*
+/**
  * @class MessagesTree
  * @brief Store messages in a tree format
  *
@@ -15,7 +15,7 @@ class MessagesTree {
         MessagesTree( std::string name );
         ~MessagesTree();
 
-        /*
+        /**
          * @fn appendMessage
          * @brief Append a message to the tree with the given path.
          * @param path The path in the tree to the leaf were to store the
@@ -28,14 +28,14 @@ class MessagesTree {
          */
         void appendMessage( std::string path, std::string message );
 
-        /*
+        /**
          * @fn display
          * @brief Recusively display the messages in the node and its sub-nodes.
          * @param before String to display before the text being displayed.
          */
         void display( std::string before );
 
-        /*
+        /**
          * @fn getName
          * @brief Return the name of the node.
          */
@@ -49,7 +49,7 @@ class MessagesTree {
 
 };
 
-/*
+/**
  * @class CppTest
  * @brief Execute, manage and display tests.
  *
@@ -63,7 +63,7 @@ class CppTest {
 
         CppTest();
 
-        /*
+        /**
          * @fn test
          * @brief Check a test.
          * @param t The result of the test, assert style.
@@ -77,7 +77,7 @@ class CppTest {
          */
         void test( bool t, std::string path, std::string message );
 
-        /*
+        /**
          * @fn display
          * @brief Display the messages stored in the message tree.
          */
