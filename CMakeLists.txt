@@ -13,8 +13,9 @@ target_sources( Kausjan
     PRIVATE
         src/App.cpp
         src/Session.cpp
-        src/Note.cpp
-        src/Event.cpp
+        src/datatypes/Note.cpp
+        src/datatypes/Event.cpp
+        src/datatypes/Request.cpp
         src/Database.cpp
         src/drivers/Sqlite.cpp
 )
@@ -35,5 +36,6 @@ target_sources( Kausjan_test
 
 target_include_directories( Kausjan_test
     PRIVATE
+        include/Crow
         include/cppTest
 )

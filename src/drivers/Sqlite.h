@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <sqlite3.h>
 
 #include "Driver.h"
 
@@ -11,7 +12,7 @@ public:
     Sqlite( std::string configuration );
     virtual ~Sqlite() = default;
 
-    virtual void select(
+    virtual Request select(
         std::string table,
         std::vector<std::string> selection,
         std::string where

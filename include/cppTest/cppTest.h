@@ -1,3 +1,8 @@
+/**
+ * cppTest.*
+ * @author Joachim Rey <joachim@meowf.fr>
+ */
+
 #include <vector>
 #include <string>
 

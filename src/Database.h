@@ -2,8 +2,8 @@
 #include <vector>
 
 #include "Session.h"
-#include "Event.h"
-#include "Note.h"
+#include "datatypes/Event.h"
+#include "datatypes/Note.h"
 #include "drivers/Driver.h"
 #include "drivers/Sqlite.h"
 

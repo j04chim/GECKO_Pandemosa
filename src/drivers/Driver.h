@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#include "../datatypes/Request.h"
+
 class Driver {
 
     public:
@@ -10,7 +12,7 @@ class Driver {
         Driver( std::string configuration );
         virtual ~Driver() = default;
 
-        virtual void select(
+        virtual Request select(
             std::string table,
             std::vector<std::string> selection,
             std::string where
