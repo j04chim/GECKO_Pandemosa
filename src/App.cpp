@@ -1,11 +1,13 @@
 
 #include "App.h"
 #include "logger.h"
+#include "drivers/Sqlite.h"
 
 
 App::App( Config& configuration ) {
 
-    this->_database = new Database( configuration );
+    if ( configuration.get( "driver" ) == "sqlite" )
+        this->_database = new Sqlite( configuration );
 
     logger( 0, "Created application !" );
 

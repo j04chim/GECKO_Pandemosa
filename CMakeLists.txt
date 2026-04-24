@@ -17,9 +17,7 @@ target_sources( Kausjan
         src/datatypes/Session.cpp
         src/datatypes/Note.cpp
         src/datatypes/Event.cpp
-        src/datatypes/Request.cpp
         src/datatypes/Config.cpp
-        src/Database.cpp
         src/drivers/Sqlite.cpp
         include/logger/logger.cpp
 )

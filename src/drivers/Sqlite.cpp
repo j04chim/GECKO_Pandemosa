@@ -16,12 +16,40 @@ Sqlite::~Sqlite() {
 }
 
 
-Request Sqlite::select(
-    std::string table,
-    std::vector<std::string> selection,
-    std::string where
+std::vector<Event> Sqlite::selectEvents(
+    std::string id,
+    std::string date,
+    std::string detail_level,
+    std::string decision_relevance,
+    std::string uncertainty_level
 ) {
 
-    return Request();
+    return {};
+
+}
+
+
+bool Sqlite::insertSession(
+    std::string id, std::string creation_date,
+    std::string ingame_date, std::string locked
+) {
+
+    return true;
+
+}
+
+
+Session Sqlite::selectSession( std::string id ) {
+
+    return Session( this );
+
+}
+
+
+std::vector<Note> Sqlite::selectNotes(
+    std::string id, std::string session_id
+) {
+
+    return {};
 
 }

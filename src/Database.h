@@ -5,34 +5,31 @@
 #include "datatypes/Session.h"
 #include "datatypes/Event.h"
 #include "datatypes/Note.h"
-#include "datatypes/Config.h"
-#include "drivers/Driver.h"
 
 class Database {
 
     public:
 
-        Database( Config& configuration );
-        ~Database();
+        Database() = default;
+        virtual ~Database() = default;
 
-        std::vector<Event> selectEvents(
+        virtual std::vector<Event> selectEvents(
             std::string id = "",
             std::string date = "",
             std::string detail_level = "",
             std::string decision_relevance = "",
             std::string uncertainty_level = ""
-        );
-        bool insertSession(
+        ) = 0;
+
+        virtual bool insertSession(
             std::string id = "", std::string creation_date = "",
             std::string ingame_date = "", std::string locked = ""
-        );
-        Session selectSession( std::string id = "" );
-        std::vector<Note> selectNotes(
+        ) = 0;
+
+        virtual Session selectSession( std::string id = "" ) = 0;
+
+        virtual std::vector<Note> selectNotes(
             std::string id = "", std::string session_id = ""
-        );
-
-    private:
-
-        Driver* _connection;
+        ) = 0;
 
 };
