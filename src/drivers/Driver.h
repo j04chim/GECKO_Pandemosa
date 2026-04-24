@@ -18,6 +18,4 @@ class Driver {
             std::string where
         ) = 0;
 
-    private:
-
 };

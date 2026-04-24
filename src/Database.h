@@ -1,7 +1,8 @@
+#pragma once
 #include <string>
 #include <vector>
 
-#include "Session.h"
+#include "datatypes/Session.h"
 #include "datatypes/Event.h"
 #include "datatypes/Note.h"
 #include "drivers/Driver.h"

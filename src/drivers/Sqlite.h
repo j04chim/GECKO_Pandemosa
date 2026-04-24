@@ -6,18 +6,18 @@
 
 class Sqlite: public Driver {
 
-public:
+    public:
 
-    Sqlite();
-    Sqlite( std::string configuration );
-    virtual ~Sqlite() = default;
+        Sqlite();
+        Sqlite( std::string configuration );
+        virtual ~Sqlite() = default;
 
-    virtual Request select(
-        std::string table,
-        std::vector<std::string> selection,
-        std::string where
-    ) = 0;
+        virtual Request select(
+            std::string table,
+            std::vector<std::string> selection,
+            std::string where
+        ) = 0;
 
-private:
+    private:
 
 };

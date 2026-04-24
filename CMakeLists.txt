@@ -6,23 +6,26 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Debug)
 
+add_definitions(-DLOG_LEVEL=0)
 
 add_executable( Kausjan )
 
 target_sources( Kausjan
     PRIVATE
         src/App.cpp
-        src/Session.cpp
+        src/datatypes/Session.cpp
         src/datatypes/Note.cpp
         src/datatypes/Event.cpp
         src/datatypes/Request.cpp
         src/Database.cpp
         src/drivers/Sqlite.cpp
+        include/logger/logger.cpp
 )
 
 target_include_directories( Kausjan
     PRIVATE
         include/Crow
+        include/logger
 )
 
 
@@ -30,12 +33,14 @@ add_executable( Kausjan_test )
 
 target_sources( Kausjan_test
     PRIVATE
-        include/cppTest/cppTest.cpp
         test/main.cpp
+        include/cppTest/cppTest.cpp
+        include/logger/logger.cpp
 )
 
 target_include_directories( Kausjan_test
     PRIVATE
         include/Crow
         include/cppTest
+        include/logger
 )
