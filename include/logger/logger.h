@@ -1,13 +1,9 @@
 /**
- * logger.*
- * @author Joachim Rey <joachim@meowf.fr>
- */
-
-/**
  * @fn log
  * @brief Log a message in std::in.
  * @param level The log level of the message.
  * @param message The message to print.
+ * @author Joachim Rey <joachim@meowf.fr>
  *
  * Display a message in std::in given a log level between 0 (lowset)
  * and 3 (highest).

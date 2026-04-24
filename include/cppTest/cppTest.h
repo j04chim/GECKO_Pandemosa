@@ -1,14 +1,10 @@
-/**
- * cppTest.*
- * @author Joachim Rey <joachim@meowf.fr>
- */
-
 #include <vector>
 #include <string>
 
 /**
  * @class MessagesTree
  * @brief Store messages in a tree format
+ * @author Joachim Rey <joachim@meowf.fr>
  *
  * Internal object to manipulate trees and manage messages.
  */
@@ -57,6 +53,7 @@ class MessagesTree {
 /**
  * @class CppTest
  * @brief Execute, manage and display tests.
+ * @author Joachim Rey <joachim@meowf.fr>
  *
  * This class is reponsible for checking tests done with test(), storing the
  * result in MessageTree object and then retreive these results to the user
