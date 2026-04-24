@@ -1,5 +1,5 @@
 /**
- * @fn log
+ * @fn logger
  * @brief Log a message in std::in.
  * @param level The log level of the message.
  * @param message The message to print.

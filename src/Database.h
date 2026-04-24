@@ -5,15 +5,15 @@
 #include "datatypes/Session.h"
 #include "datatypes/Event.h"
 #include "datatypes/Note.h"
+#include "datatypes/Config.h"
 #include "drivers/Driver.h"
-#include "drivers/Sqlite.h"
 
 class Database {
 
     public:
 
-        Database();
-        Database( std::string configuration );
+        Database( Config& configuration );
+        ~Database();
 
         std::vector<Event> selectEvents(
             std::string id = "",

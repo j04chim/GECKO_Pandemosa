@@ -8,8 +8,6 @@ class Driver {
 
     public:
 
-        Driver();
-        Driver( std::string configuration );
         virtual ~Driver() = default;
 
         virtual Request select(

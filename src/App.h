@@ -3,13 +3,13 @@
 #include <vector>
 
 #include "Database.h"
+#include "datatypes/Config.h"
 
 class App {
 
     public:
 
-        App();
-        App( std::string configuration );
+        App( Config& configuration );
         ~App();
 
         void landing_page();
@@ -23,7 +23,7 @@ class App {
 
     private:
 
-        std::vector<Session> _session;
-        Database _database;
+        std::vector<Session*> _session;
+        Database* _database;
 
 };
