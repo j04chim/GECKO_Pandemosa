@@ -8,9 +8,8 @@ void logger( int level, const char* message ) {
     time_t timestamp;
     time(&timestamp);
 #endif
-
-    switch (level) {
 #if LOG_LEVEL <= 3
+    switch (level) {
         case 3:
             printf(
                 "\033[31m(%.24s)[fat] %s\033[0m\n", ctime(&timestamp), message
@@ -34,7 +33,6 @@ void logger( int level, const char* message ) {
 #endif
 #endif
 #endif
-#endif
-
     }
+#endif
 }
