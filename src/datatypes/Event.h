@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
 
+/**
+ * @class Event
+ * @brief Event data model
+ */
 class Event {
 
     public:
@@ -22,9 +26,26 @@ class Event {
             std::string source_url = ""
         );
 
+        /**
+         * @fn toJson
+         * @brief Return a JSON string representing the object.
+         * @return std::string JSON string
+         */
         std::string toJson();
 
+        /**
+         * @fn getId
+         * @brief Return object's id
+         * @return int id of the object
+         */
         int getId() { return this->_id; }
+
+        /**
+         * @fn getDate
+         * @brief Return object's report date
+         * @return std::string Report date of the object
+         */
+        std::string getDate() { return this->_report_date; }
 
     private:
 

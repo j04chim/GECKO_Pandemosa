@@ -20,30 +20,12 @@ Session::Session(
 }
 
 
-bool Session::open() {
-
-    logger( 0, "Session opened" );
-
-    return true;
-
-}
-
-
-bool Session::close() {
-
-    logger( 0, "Session closed" );
-
-    return true;
-
-}
-
-
 std::string Session::toJson() {
 
     return
-        "{\"id\": " + std::to_string( this->_id ) + "\"," +
-        "\"creation_date\": " + this->_creation_date + "\"," +
-        "\"ingame_date\": " + this->_ingame_date + "\"," +
-        "\"locked\": " + std::to_string( this->_locked ) + "\"}";
+        "{\"id\": " + std::to_string( this->_id ) + "," +
+        "\"creation_date\": \"" + this->_creation_date + "\"," +
+        "\"ingame_date\": \"" + this->_ingame_date + "\"," +
+        "\"locked\": " + std::to_string( this->_locked ) + "}";
 
 }

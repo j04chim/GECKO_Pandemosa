@@ -137,14 +137,15 @@ std::vector<Event> Sqlite::selectEvents(
 }
 
 
-int Sqlite::insertSession(
+Session Sqlite::insertSession(
     std::string creation_date, std::string ingame_date
 ) {
 
     sqlite3_stmt* st;
 
     std::string sql =
-        "INSERT INTO Session (creation_date, ingame_date, locked) VALUES (?, ?, ?)";
+        "INSERT INTO Session (creation_date, ingame_date, locked) VALUES (?1, ?2, ?3)";
+    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
 
     sqlite3_bind_text(
         st, 1, creation_date.c_str(), creation_date.size(), SQLITE_TRANSIENT
@@ -154,11 +155,10 @@ int Sqlite::insertSession(
     );
     sqlite3_bind_int( st, 3, 0 );
 
-
-    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
-    int id = sqlite3_last_insert_rowid(this->_db);
+    logger( 0, "Inserted new action in database" );
 
     int code = sqlite3_step( st );
+    int id = sqlite3_last_insert_rowid(this->_db);
 
     if ( code == SQLITE_DONE )
         logger( 0, "Inserted new session in database" );
@@ -169,24 +169,31 @@ int Sqlite::insertSession(
             sqlite3_errmsg( this->_db ) ).c_str()
         );
 
-    return id;
+    Session res(
+        id,
+        creation_date,
+        ingame_date,
+        0
+    );
+
+    return res;
 
 }
 
 
 int Sqlite::insertAction(
-    int session_id, int report_id, std::string action,
+    std::string session_id, std::string report_id, std::string action,
     std::string description
 ) {
 
     sqlite3_stmt* st;
 
     std::string sql =
-        "INSERT INTO Action (session_id, report_id, action, description) VALUES (?, ?, ?, ?)";
+        "INSERT INTO Action (session_id, report_id, action, description) VALUES (?1, ?2, ?3, ?4)";
+    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
 
-
-    sqlite3_bind_int( st, 1, session_id );
-    sqlite3_bind_int( st, 2, report_id );
+    sqlite3_bind_int( st, 1, std::stoi(session_id) );
+    sqlite3_bind_int( st, 2, std::stoi(report_id) );
     sqlite3_bind_text(
         st, 3, action.c_str(), action.size(), SQLITE_TRANSIENT
     );
@@ -194,10 +201,8 @@ int Sqlite::insertAction(
         st, 4, description.c_str(), description.size(), SQLITE_TRANSIENT
     );
 
-    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
-    int id = sqlite3_last_insert_rowid(this->_db);
-
     int code = sqlite3_step( st );
+    int id = sqlite3_last_insert_rowid(this->_db);
 
     if ( code == SQLITE_DONE )
         logger( 0, "Inserted new action in database" );
@@ -213,27 +218,26 @@ int Sqlite::insertAction(
 }
 
 
-int Sqlite::insertNote(
-    int session_id, std::string title, std::string content
+Note Sqlite::insertNote(
+    std::string session_id, std::string title, std::string content
 ) {
 
     sqlite3_stmt* st;
 
     std::string sql =
-        "INSERT INTO Action (session_id, title, content) VALUES (?, ?, ?)";
-
-    sqlite3_bind_int( st, 1, session_id );
-    sqlite3_bind_text(
-        st, 3, title.c_str(), sizeof(title), SQLITE_TRANSIENT
-    );
-    sqlite3_bind_text(
-        st, 4, content.c_str(), sizeof(content), SQLITE_TRANSIENT
-    );
-
+        "INSERT INTO Note (session_id, title, content) VALUES (?1, ?2, ?3)";
     sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
-    int id = sqlite3_last_insert_rowid(this->_db);
+
+    sqlite3_bind_int( st, 1, std::stoi(session_id) );
+    sqlite3_bind_text(
+        st, 2, title.c_str(), title.size(), SQLITE_TRANSIENT
+    );
+    sqlite3_bind_text(
+        st, 3, content.c_str(), content.size(), SQLITE_TRANSIENT
+    );
 
     int code = sqlite3_step( st );
+    int id = sqlite3_last_insert_rowid(this->_db);
 
     if ( code == SQLITE_DONE )
         logger( 0, "Inserted new note in database" );
@@ -244,7 +248,14 @@ int Sqlite::insertNote(
             sqlite3_errmsg( this->_db ) ).c_str()
         );
 
-    return id;
+    Note res(
+        id,
+        std::stoi(session_id),
+        title,
+        content
+    );
+
+    return res;
 
 }
 
@@ -253,12 +264,9 @@ Session Sqlite::selectSession( std::string id ) {
 
     sqlite3_stmt* st;
     std::string sql = "SELECT * FROM Session WHERE id = ?";
-
-
     sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
 
     sqlite3_bind_int( st, 1, std::stoi(id) );
-
 
     int code = sqlite3_step( st );
     while ( code == SQLITE_ROW || code == SQLITE_BUSY ) {
@@ -292,35 +300,22 @@ Session Sqlite::selectSession( std::string id ) {
 
 
 std::vector<Note> Sqlite::selectNotes(
-    std::string id, std::string session_id
+    std::string session_id
 ) {
 
     std::vector<Note> result;
 
-    sqlite3_stmt* st;
-    std::string sql = "SELECT * FROM Note WHERE id > -1";
+    if ( session_id == "" )
+        return result;
 
-    if ( id != "" )
-        sql += "id = ? ";
-    if ( session_id != "" )
-        sql += "session_id = ? ";
+    sqlite3_stmt* st;
+    std::string sql = "SELECT * FROM Note WHERE session_id = ?1 ";
 
     sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
 
-    int p = 1;
-
-    if ( id != "" ) {
-        sqlite3_bind_int( st, p, std::stoi(id) );
-        p++;
-    }
-    if ( session_id != "" ) {
-        sqlite3_bind_int( st, p, std::stoi(session_id) );
-        p++;
-    }
-
+    sqlite3_bind_int( st, 1, std::stoi(session_id) );
 
     int code = sqlite3_step( st );
-    int first = -1;
     while ( code == SQLITE_ROW || code == SQLITE_BUSY ) {
 
         if ( code == SQLITE_ROW ) {
@@ -336,14 +331,14 @@ std::vector<Note> Sqlite::selectNotes(
                     std::string()
             );
 
-            if ( first == tmp.getId() )
+            if ( 0 == tmp.getId() )
                 return result;
-            if ( first == -1 )
-                first = tmp.getId();
 
             result.push_back(tmp);
 
         }
+
+        int code = sqlite3_step( st );
 
     }
 
@@ -354,5 +349,43 @@ std::vector<Note> Sqlite::selectNotes(
         );
 
     return result;
+
+}
+
+int Sqlite::updateSession(
+    std::string session_id,
+    std::string new_ingame_date
+) {
+
+        sqlite3_stmt* st;
+
+    std::string sql =
+        "UPDATE Session SET ingame_date = ?1 WHERE id = ?2";
+    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
+
+    sqlite3_bind_text(
+        st, 1, new_ingame_date.c_str(), new_ingame_date.size(), SQLITE_TRANSIENT
+    );
+    sqlite3_bind_int( st, 2, std::stoi(session_id) );
+
+    int code = sqlite3_step( st );
+    int id = sqlite3_last_insert_rowid(this->_db);
+
+    if ( code == SQLITE_DONE ) {
+        logger(
+            0, ("Updated session " + session_id + " in-game date to " +
+            new_ingame_date).c_str()
+        );
+        return 0;
+    }
+
+
+    if ( code == SQLITE_ERROR )
+        logger( 1,
+            ( std::string( "Failed to execute request, SQLITE_ERROR: ") +
+            sqlite3_errmsg( this->_db ) ).c_str()
+        );
+
+    return 1;
 
 }

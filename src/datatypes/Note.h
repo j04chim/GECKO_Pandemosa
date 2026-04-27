@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
 
+/**
+ * @class Note
+ * @brief Note data model
+ */
 class Note {
 
     public:
@@ -12,8 +16,18 @@ class Note {
           std::string content
         );
 
+        /**
+         * @fn toJson
+         * @brief Return a JSON string representing the object.
+         * @return std::string JSON string
+         */
         std::string toJson();
 
+        /**
+         * @fn getId
+         * @brief Return object's id
+         * @return int id of the object
+         */
         int getId() { return this->_id; }
 
     private:

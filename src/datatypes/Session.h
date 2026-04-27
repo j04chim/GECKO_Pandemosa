@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
 
-class Database;
-
+/**
+ * @class Session
+ * @brief Session data model
+ */
 class Session {
 
     public:
@@ -15,8 +17,11 @@ class Session {
             int locked
         );
 
-        bool open();
-        bool close();
+        /**
+         * @fn toJson
+         * @brief Return a JSON string representing the object.
+         * @return std::string JSON string
+         */
         std::string toJson();
 
     private:
@@ -25,6 +30,5 @@ class Session {
         std::string _creation_date;
         std::string _ingame_date;
         int _locked;
-        Database* _db;
 
 };
