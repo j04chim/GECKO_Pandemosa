@@ -7,7 +7,13 @@ class Session {
 
     public:
 
-        Session( Database* );
+        Session();
+        Session(
+            int id,
+            std::string creation_date,
+            std::string ingame_date,
+            int locked
+        );
 
         bool open();
         bool close();
@@ -16,9 +22,9 @@ class Session {
     private:
 
         int _id;
-        int _creation_date;
-        int _ingame_date;
-        bool _locked;
+        std::string _creation_date;
+        std::string _ingame_date;
+        int _locked;
         Database* _db;
 
 };

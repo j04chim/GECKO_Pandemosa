@@ -2,12 +2,20 @@
 #include "App.h"
 #include "logger.h"
 #include "drivers/Sqlite.h"
+#include <iostream>
 
 
 App::App( Config& configuration ) {
 
     if ( configuration.get( "driver" ) == "sqlite" )
         this->_database = new Sqlite( configuration );
+
+    std::vector<Event> es = _database->selectEvents("", "2020-01-09");
+
+    std::cout << "{\"Events\": [";
+    for ( Event e: es )
+        std::cout << e.toJson() << ",";
+    std::cout << "]}\n";
 
     logger( 0, "Created application !" );
 

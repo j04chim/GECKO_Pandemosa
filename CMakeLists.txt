@@ -8,7 +8,10 @@ set(CMAKE_BUILD_TYPE Debug)
 
 add_definitions(-DLOG_LEVEL=0)
 
+
 add_executable( Kausjan )
+
+target_link_libraries( Kausjan sqlite3 )
 
 target_sources( Kausjan
     PRIVATE
@@ -30,6 +33,8 @@ target_include_directories( Kausjan
 
 
 add_executable( Kausjan_test )
+
+target_link_libraries( Kausjan_test sqlite3 )
 
 target_sources( Kausjan_test
     PRIVATE

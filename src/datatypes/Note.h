@@ -14,6 +14,8 @@ class Note {
 
         std::string toJson();
 
+        int getId() { return this->_id; }
+
     private:
 
         int _id;

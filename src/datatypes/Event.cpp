@@ -9,12 +9,12 @@ Event::Event(
     int decision_relevance,
     std::string information_density,
     std::string uncertainty_level,
-    std::string source_url,
-    int category_id,
     int stakeholder_level_id,
-    int knowledge_status_id,
+    int category_id,
     int pandemic_phase_id,
-    int source_id
+    int source_id,
+    int knowledge_status_id,
+    std::string source_url
 ) {
 
     this->_id = id;

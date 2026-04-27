@@ -14,15 +14,17 @@ class Event {
             int decision_relevance = 0,
             std::string information_density = "",
             std::string uncertainty_level = "",
-            std::string source_url = "",
-            int category_id = 0,
             int stakeholder_level_id = 0,
-            int knowledge_status_id = 0,
+            int category_id = 0,
             int pandemic_phase_id = 0,
-            int source_id = 0
+            int source_id = 0,
+            int knowledge_status_id = 0,
+            std::string source_url = ""
         );
 
         std::string toJson();
+
+        int getId() { return this->_id; }
 
     private:
 

@@ -18,15 +18,14 @@ class Sqlite: public Database {
 
         virtual std::vector<Event> selectEvents(
             std::string id = "",
-            std::string date = "",
+            std::string report_date = "",
             std::string detail_level = "",
             std::string decision_relevance = "",
             std::string uncertainty_level = ""
         ) override;
 
-        virtual bool insertSession(
-            std::string id = "", std::string creation_date = "",
-            std::string ingame_date = "", std::string locked = ""
+        virtual int insertSession(
+            std::string creation_date = "", std::string ingame_date = ""
         ) override;
 
         virtual Session selectSession( std::string id = "" ) override;
@@ -35,6 +34,19 @@ class Sqlite: public Database {
             std::string id = "", std::string session_id = ""
         ) override;
 
+        virtual int insertAction(
+            int session_id, int report_id, std::string action,
+            std::string description
+        ) override;
+
+        virtual int insertNote(
+            int session_id, std::string title,
+            std::string content
+        ) override;
+
     private:
+
+        sqlite3* _db;
+        bool _loaded;
 
 };
