@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
         return 1;
 
     App* app = new App( *conf );
+    app->run();
 
     return 0;
 

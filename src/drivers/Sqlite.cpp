@@ -82,7 +82,6 @@ std::vector<Event> Sqlite::selectEvents(
     }
 
     int code = sqlite3_step( st );
-    int first = -1;
     while ( code == SQLITE_ROW || code == SQLITE_BUSY ) {
 
         if ( code == SQLITE_ROW ) {
@@ -116,10 +115,8 @@ std::vector<Event> Sqlite::selectEvents(
                     std::string()
             );
 
-            if ( first == tmp.getId() )
+            if ( 0 == tmp.getId() )
                 return result;
-            if ( first == -1 )
-                first = tmp.getId();
 
             result.push_back(tmp);
 

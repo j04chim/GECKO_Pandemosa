@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "crow.h"
 #include "Database.h"
 #include "datatypes/Config.h"
 
@@ -20,10 +21,13 @@ class App {
             std::string description
         );
         void getStats();
+        void run();
 
     private:
 
         std::vector<Session*> _session;
         Database* _database;
+        crow::SimpleApp _app;
+        int _port;
 
 };
