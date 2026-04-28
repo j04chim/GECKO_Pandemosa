@@ -12,7 +12,7 @@ $ cmake .
 $ make
 ```
 
-The executable are located in the build folder. `Kausjan` start the server and `Kausjan_test` start the test suit.
+The executables are located in the build folder. `Kausjan` start the server and `Kausjan_test` start the test suit.
 A config file using the following format is required:
 ```bash
 port=8080
