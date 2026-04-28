@@ -10,8 +10,16 @@
 			* {
 				font-family: sans-serif;
 			}
+			html {
+				background-color: #272727;
+			}
+			body {
+				padding: 10px;
+			}
 			.opts {
 				display: flex;
+				border-bottom: black 2px solid;
+				margin-bottom: 10px;
 			}
 			.opt {
 				display: flex;
@@ -19,11 +27,31 @@
 				margin-right: 10px;
 				margin-bottom: 10px;
 			}
+			.opt > input, .opt > select {
+				border: solid 2px black;
+				border-radius: 10px;
+				background-color: #7c7c7c;
+				padding: 5px;
+			}
 			.api {
 				margin: 10px;
 				padding: 10px;
 				border: black 2px solid;
 				border-radius: 20px;
+				background-color: #343434;
+				color: #eaf0af;
+			}
+			.api > button {
+				border: #6eb3dc 1px solid;
+				background-color: #2883b8;
+				padding: 10px;
+				border-radius: 10px;
+				transition-duration: 0.25s;
+				color: #eaf0af;
+			}
+			.api > button:hover {
+				background-color: #2d6c91;
+				border-color: #2d6c91;
 			}
 			.output {
 				height: 500px;
@@ -33,6 +61,8 @@
 				background-color: #525050;
 				overflow: scroll;
 				color: #d2db84;
+			}
+			.res {
 				padding: 10px;
 			}
 		</style>
