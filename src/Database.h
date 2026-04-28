@@ -92,7 +92,7 @@ class Database {
         ) = 0;
 
         /**
-        * @fn insertNote
+        * @fn updateSession
         * @brief Update the session's in-game date.
         * @param session_id Session's id
         * @param new_ingame_date New in-game date

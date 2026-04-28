@@ -76,7 +76,7 @@ std::vector<Event> Sqlite::selectEvents(
     }
     if ( uncertainty_level != "" ) {
         sqlite3_bind_text(
-            st, 5, decision_relevance.c_str(), decision_relevance.size(),
+            st, 5, uncertainty_level.c_str(), uncertainty_level.size(),
             SQLITE_TRANSIENT
         );
     }
