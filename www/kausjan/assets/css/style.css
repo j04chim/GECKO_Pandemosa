@@ -1,0 +1,32 @@
+.event {
+	position: absolute;
+	border: black 3px solid;
+	background-color: lightgoldenrodyellow;
+	height: 500px;
+	width: 300px;
+	display: flex;
+	flex-direction: column;
+}
+
+.event_button {
+  border: black 2px solid;
+	width: 100%;
+	height: 50px;
+	margin: 10px;
+}
+
+.event_act {
+	background-color: green;
+}
+
+.event_pass {
+	background-color: red;
+}
+
+.event_footer {
+	display: flex;
+}
+
+.event_content {
+	height: 100%;
+}
