@@ -1,3 +1,11 @@
+* {
+	-webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .event {
 	position: absolute;
 	border: black 3px solid;
@@ -6,6 +14,9 @@
 	width: 300px;
 	display: flex;
 	flex-direction: column;
+	top: 0px;
+	left: 0px;
+	transition: rotate 0.2s cubic-bezier(0.33, 1.49, 0.98, 0.99);
 }
 
 .event_button {
@@ -28,5 +39,11 @@
 }
 
 .event_content {
+	padding: 10px;
 	height: 100%;
+}
+
+.event_header {
+	display: flex;
+	justify-content: right;
 }

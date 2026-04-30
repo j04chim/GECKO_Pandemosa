@@ -1,6 +1,14 @@
 class Event {
 
-	constructor(title, desc) {
+	constructor(title, desc, x, y) {
+
+		this.x = x;
+		this.y = y;
+		this.rotation = 0;
+		this.old_mouse_x = -1;
+		this.old_mouse_y = -1;
+		this.mouseclick = false;
+		this.locked = false;
 
 		this.obj = document.createElement("div");
 		let header = document.createElement("div");
@@ -10,13 +18,13 @@ class Event {
 		let footer = document.createElement("div");
 		let button_pass = document.createElement("button");
 		let button_act = document.createElement("button");
-		let button_zoom = document.createElement("button");
+		this.button_zoom = document.createElement("button");
 
 		rtitle.innerText = title;
 		description.innerText = desc;
 		button_act.innerText = "Act";
 		button_pass.innerText = "Pass";
-		button_zoom.innerText = "Zoom";
+		this.button_zoom.innerText = "Zoom";
 
 		button_act.classList.add("event_button");
 		button_act.classList.add("event_act");
@@ -27,10 +35,13 @@ class Event {
 		description.classList.add("event_desc");
 		content.classList.add("event_content");
 		header.classList.add("event_header");
-		button_zoom.classList.add("event_zoom");
+		this.button_zoom.classList.add("event_zoom");
 		this.obj.classList.add("event");
 
-		header.appendChild(button_zoom);
+		this.zoom = this.zoom.bind(this);
+		this.button_zoom.addEventListener("click", this.zoom);
+
+		header.appendChild(this.button_zoom);
 		footer.appendChild(button_act);
 		footer.appendChild(button_pass);
 		content.appendChild(rtitle);
@@ -40,10 +51,100 @@ class Event {
 		this.obj.appendChild(content);
 		this.obj.appendChild(footer);
 
+		this.moveto = this.moveto.bind(this);
+		this.click = this.click.bind(this);
+		this.release = this.release.bind(this);
+
+		this.obj.style.left = this.x + "px";
+		this.obj.style.top = this.y + "px";
+
+		this.obj.addEventListener("mousemove", this.moveto);
+		this.obj.addEventListener("mousedown", this.click);
+		this.obj.addEventListener("mouseup", this.release);
+		this.obj.addEventListener("mouseleave", this.release);
+
 		document.getElementById("events").appendChild(this.obj);
 
+		this.zIndex = this.obj.style.zIndex;
+
+	}
+
+	moveto(e) {
+
+		if ( !this.locked && this.mouseclick ) {
+
+			let mvx = e.pageX - this.old_mouse_x;
+			let mvy = e.pageY - this.old_mouse_y;
+			if ( this.rotation >= 6 || this.rotation <= -6 || mvy > 5 || mvx < -5 ) {
+
+				this.x += mvx;
+				this.y += mvy;
+				this.obj.style.left = this.x + "px";
+				this.obj.style.top = this.y + "px";
+			}
+			let vy = (e.pageY - 250) - this.y;
+
+			if ( vy > 0 )
+				this.rotation += ( Math.acos( mvy / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) * -1 );
+			else
+				this.rotation += ( Math.acos( (mvy * -1) / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) );
+			if ( this.rotation > 15 ) this.rotation = 15;
+			if ( this.rotation < -15 ) this.rotation = -15;
+			this.obj.style.rotate = this.rotation + "deg";
+
+			this.old_mouse_x = e.pageX;
+			this.old_mouse_y = e.pageY;
+
+		}
+
+	}
+
+	click(e) {
+		if ( !this.locked ) {
+				this.mouseclick = true;
+			this.old_mouse_x = e.pageX;
+			this.old_mouse_y = e.pageY;
+			this.obj.style.zIndex = "999";
+		}
+	}
+
+	release(e) {
+		if ( !this.locked ) {
+			this.rotation = 0;
+			this.obj.style.rotate = this.rotation + "deg";
+			this.mouseclick = false;
+			this.obj.style.zIndex = this.zIndex;
+		}
+	}
+
+	zoom(e) {
+		if ( !this.locked ) {
+			this.locked = true;
+			this.background = document.createElement("div");
+			this.background.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+			this.background.style.backdropFilter = "blur(10px)";
+			this.background.style.width = "200vw";
+			this.background.style.height = "200vh";
+			this.background.style.position = "absolute";
+			this.background.style.overflow = "hidden";
+			this.background.style.zIndex = "998";
+			this.background.style.top = "-100px";
+			this.background.style.left = "-100px";
+			this.obj.style.zIndex = "999";
+			this.obj.style.left = ((document.body.clientWidth / 2) - 150) + "px";
+			this.obj.style.top = ((window.screen.height / 2) - 250) + "px";
+			document.getElementById("events").appendChild(this.background);
+		} else {
+			this.background.remove();
+			this.obj.style.zIndex = this.zIndex;
+			this.obj.style.left = this.x + "px";
+			this.obj.style.top = this.y + "px";
+			this.locked = false;
+		}
 	}
 
 };
 
-let e = new Event("a", "b");
+document.getElementById("create").addEventListener("click", (e) => {
+	new Event("asdasd asd asd asd  asd fdg fd g", " sdf sf sdf sdf thdfgfASFDS SDF SDDF SDFAs dh g", Math.random() * 1000, Math.random() * 1000);
+})
