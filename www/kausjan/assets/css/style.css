@@ -16,6 +16,7 @@
 	flex-direction: column;
 	top: 0px;
 	left: 0px;
+	box-shadow: 0px 0px 10px 0px black;
 	transition: rotate 0.2s cubic-bezier(0.33, 1.49, 0.98, 0.99);
 }
 

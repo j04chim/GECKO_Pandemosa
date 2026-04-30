@@ -75,19 +75,16 @@ class Event {
 
 			let mvx = e.pageX - this.old_mouse_x;
 			let mvy = e.pageY - this.old_mouse_y;
-			if ( this.rotation >= 6 || this.rotation <= -6 || mvy > 5 || mvx < -5 ) {
-
-				this.x += mvx;
-				this.y += mvy;
-				this.obj.style.left = this.x + "px";
-				this.obj.style.top = this.y + "px";
-			}
+			this.x += mvx;
+			this.y += mvy;
+			this.obj.style.left = this.x + "px";
+			this.obj.style.top = this.y + "px";
 			let vy = (e.pageY - 250) - this.y;
 
 			if ( vy > 0 )
-				this.rotation += ( Math.acos( mvy / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) * -1 );
+				this.rotation += ( Math.acos( mvy / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) * -1 ) / 100;
 			else
-				this.rotation += ( Math.acos( (mvy * -1) / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) );
+				this.rotation += ( Math.acos( (mvy * -1) / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) ) / 100;
 			if ( this.rotation > 15 ) this.rotation = 15;
 			if ( this.rotation < -15 ) this.rotation = -15;
 			this.obj.style.rotate = this.rotation + "deg";
@@ -110,8 +107,6 @@ class Event {
 
 	release(e) {
 		if ( !this.locked ) {
-			this.rotation = 0;
-			this.obj.style.rotate = this.rotation + "deg";
 			this.mouseclick = false;
 			this.obj.style.zIndex = this.zIndex;
 		}
@@ -133,18 +128,28 @@ class Event {
 			this.obj.style.zIndex = "999";
 			this.obj.style.left = ((document.body.clientWidth / 2) - 150) + "px";
 			this.obj.style.top = ((window.screen.height / 2) - 250) + "px";
+			this.obj.style.rotate = "0deg";
 			document.getElementById("events").appendChild(this.background);
 		} else {
 			this.background.remove();
 			this.obj.style.zIndex = this.zIndex;
 			this.obj.style.left = this.x + "px";
 			this.obj.style.top = this.y + "px";
+			this.obj.style.rotate = this.rotation + "deg";
 			this.locked = false;
 		}
 	}
 
 };
 
+class Timescale {
+
+	constructor(start) {
+
+	}
+
+}
+
 document.getElementById("create").addEventListener("click", (e) => {
-	new Event("asdasd asd asd asd  asd fdg fd g", " sdf sf sdf sdf thdfgfASFDS SDF SDDF SDFAs dh g", Math.random() * 1000, Math.random() * 1000);
+	new Event("asdasd asd asd asd  asd fdg fd g", " sdf sf sdf sdf thdfgfASFDS SDF SDDF SDFAs dh g", Math.random() * 100, Math.random() * 100);
 })
