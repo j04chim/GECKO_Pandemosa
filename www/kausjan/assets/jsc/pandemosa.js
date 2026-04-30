@@ -9,6 +9,8 @@ class Event {
 		this.old_mouse_y = -1;
 		this.mouseclick = false;
 		this.locked = false;
+		this.weight = (Math.random() * 10) % 15;
+		if ( this.weight < 6 ) this.weight = 6;
 
 		this.obj = document.createElement("div");
 		let header = document.createElement("div");
@@ -85,8 +87,8 @@ class Event {
 				this.rotation += ( Math.acos( mvy / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) * -1 ) / 100;
 			else
 				this.rotation += ( Math.acos( (mvy * -1) / Math.sqrt( Math.pow(mvy, 2) + Math.pow(mvx, 2) ) ) * (180 / Math.PI) * Math.sign(mvx) ) / 100;
-			if ( this.rotation > 15 ) this.rotation = 15;
-			if ( this.rotation < -15 ) this.rotation = -15;
+			if ( this.rotation > this.weight ) this.rotation = this.weight;
+			if ( this.rotation < -this.weight ) this.rotation = -this.weight;
 			this.obj.style.rotate = this.rotation + "deg";
 
 			this.old_mouse_x = e.pageX;
@@ -142,9 +144,23 @@ class Event {
 
 };
 
-class Timescale {
+class Timeline {
 
-	constructor(start) {
+	constructor(start, ticks) {
+		let day = parseInt(start.split("-")[0]);
+		let month = parseInt(start.split("-")[1]);
+		let year = parseInt(start.split("-")[2]);
+		this.start = new Date(year, month, day);
+		this.offset = ticks;
+		this.current = day;
+		this.time = [];
+		let timeline = document.getElementById("timeline");
+		for ( let i = 1; i <= ticks; ++i ) {
+			let tmp = document.createElement("div");
+			tmp.classList.add("timeline_tick");
+			tmp.innerText = day + i;
+			timeline.appendChild(tmp);
+		}
 
 	}
 
@@ -153,3 +169,5 @@ class Timescale {
 document.getElementById("create").addEventListener("click", (e) => {
 	new Event("asdasd asd asd asd  asd fdg fd g", " sdf sf sdf sdf thdfgfASFDS SDF SDDF SDFAs dh g", Math.random() * 100, Math.random() * 100);
 })
+
+new Timeline("25-06-2020", 10);

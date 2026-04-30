@@ -48,3 +48,8 @@
 	display: flex;
 	justify-content: right;
 }
+
+#timeline {
+	display: flex;
+	justify-content: space-evenly;
+}
