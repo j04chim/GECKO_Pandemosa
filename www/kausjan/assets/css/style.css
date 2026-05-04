@@ -50,6 +50,14 @@
 }
 
 #timeline {
-	display: flex;
-	justify-content: space-evenly;
+
+}
+
+.timeline_tick {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	transition: left 0.5s, border 0.25s;
+	border: solid 2px transparent;
+	border-radius: 10px;
 }
