@@ -1,11 +1,11 @@
 class Tick {
 
-	constructor(nb_of_ticks, label, size, x, y) {
+	constructor(nb_of_ticks, date, size, x, y) {
 
 		this.nb_of_ticks = nb_of_ticks;
 		this.obj = document.createElement("div");
 		this.obj.classList.add("timeline_tick");
-		this.obj.innerText = label;
+		this.obj.innerText = date.getDate();
 		let timeline = document.getElementById("timeline");
 		timeline.appendChild(this.obj);
 		this.obj.style.left = x + "px";
@@ -13,6 +13,7 @@ class Tick {
 		this.o_x = x;
 		this.o_y = y;
 		this.size = size;
+		this.date = new Date(date);
 
 	}
 
@@ -30,6 +31,10 @@ class Tick {
 		this.obj.style.border = "solid 2px transparent";
 	}
 
+	getDate() {
+		return this.date;
+	}
+
 	delete() {
 		this.obj.remove();
 	}
@@ -39,12 +44,21 @@ class Tick {
 class Timeline {
 
 	constructor(start, ticks) {
-		let day = parseInt(start.split("-")[0]);
+		let day = parseInt(start.split("-")[2]);
 		let month = parseInt(start.split("-")[1]);
-		let year = parseInt(start.split("-")[2]);
+		let year = parseInt(start.split("-")[0]);
 		this.ticks = ticks;
 		this.current = new Date(year, month, day);
-		this.current.setDate(this.current.getDate() - 1);
+
+		this.obj = document.createElement("div");
+		this.obj.classList.add("timeline_text");
+		this.obj.style.top = window.screen.height - 200 + "px";
+		this.obj.style.left = 50 + "px";
+		this.obj.innerText = this.current.toDateString();
+		let timeline = document.getElementById("timeline");
+		timeline.appendChild(this.obj);
+
+		this.current.setDate(this.current.getDate() - ticks / 2 - 1);
 		this.time = [];
 		this.selected = null;
 
@@ -61,7 +75,7 @@ class Timeline {
 
 	next() {
 		this.current.setDate(this.current.getDate() + 1);
-		let tmp = new Tick(this.ticks, this.current.getDate(), document.body.clientWidth - 100, 50, window.screen.height - 150);
+		let tmp = new Tick(this.ticks, this.current, document.body.clientWidth - 100, 50, window.screen.height - 150);
 		this.time.push(tmp);
 		if ( this.time[0] == 0 ) {
 			this.time.shift();
@@ -74,6 +88,8 @@ class Timeline {
 				this.selected.unselect();
 			}
 			this.selected = this.time[Math.round(this.time.length/2 - 1, 0)].select();
+			console.log(this.selected.date);
+			this.obj.innerText = this.selected.date.toDateString();
 			for ( let i = 0; i < this.time.length - 1; ++i )
 				this.time[i].moveright(1);
 		}

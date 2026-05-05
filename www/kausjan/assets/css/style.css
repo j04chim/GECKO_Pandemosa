@@ -1,3 +1,7 @@
+html {
+	overflow: hidden;
+}
+
 * {
 	-webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -17,7 +21,7 @@
 	top: 0px;
 	left: 0px;
 	box-shadow: 0px 0px 10px 0px black;
-	transition: rotate 0.2s cubic-bezier(0.33, 1.49, 0.98, 0.99);
+	transition: rotate 0.3s cubic-bezier(0.33, 1.49, 0.98, 0.99);
 }
 
 .event_button {
@@ -49,6 +53,10 @@
 	justify-content: right;
 }
 
+.event_content {
+	overflow: scroll;
+}
+
 #timeline {
 
 }
@@ -60,4 +68,10 @@
 	transition: left 0.5s, border 0.25s;
 	border: solid 2px transparent;
 	border-radius: 10px;
+}
+
+.timeline_text {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }

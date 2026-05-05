@@ -2,6 +2,7 @@
 #include <string>
 
 #include "crow.h"
+#include "crow/middlewares/cors.h"
 #include "Database.h"
 #include "datatypes/Config.h"
 
@@ -29,7 +30,7 @@ class App {
     private:
 
         Database* _database;
-        crow::SimpleApp _app;
+        crow::App<crow::CORSHandler> _app;
         int _port;
 
 };

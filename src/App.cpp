@@ -29,6 +29,9 @@ App::~App() {
 
 void App::run() {
 
+	auto& cors = this->_app.get_middleware<crow::CORSHandler>();
+	cors.global().origin("*");
+
     CROW_ROUTE(this->_app, "/getEvents").methods(crow::HTTPMethod::Get)
         ([this](const crow::request& req) {
 
