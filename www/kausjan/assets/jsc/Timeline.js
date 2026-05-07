@@ -1,11 +1,11 @@
 class Tick {
 
-	constructor(nb_of_ticks, date, size, x, y) {
+	constructor(nb_of_ticks, label, date, size, x, y) {
 
 		this.nb_of_ticks = nb_of_ticks;
 		this.obj = document.createElement("div");
 		this.obj.classList.add("timeline_tick");
-		this.obj.innerText = date.getDate();
+		this.obj.innerText = label;
 		let timeline = document.getElementById("timeline");
 		timeline.appendChild(this.obj);
 		this.obj.style.left = x + "px";
@@ -49,6 +49,7 @@ class Timeline {
 		let year = parseInt(start.split("-")[0]);
 		this.ticks = ticks;
 		this.current = new Date(year, month, day);
+		this.day = 0;
 
 		this.obj = document.createElement("div");
 		this.obj.classList.add("timeline_text");
@@ -75,8 +76,9 @@ class Timeline {
 
 	next() {
 		this.current.setDate(this.current.getDate() + 1);
-		let tmp = new Tick(this.ticks, this.current, document.body.clientWidth - 100, 50, window.screen.height - 150);
+		let tmp = new Tick(this.ticks, this.day, this.current, document.body.clientWidth - 100, 50, window.screen.height - 150);
 		this.time.push(tmp);
+		this.day++;
 		if ( this.time[0] == 0 ) {
 			this.time.shift();
 			for ( let i = 0; i < this.time.length - 1; ++i )

@@ -1,5 +1,24 @@
+@font-face {
+  font-family: 'Arkipelago';
+  src: url('/assets/fon/arkipelago-font.woff2') format('woff2'),
+       url('/assets/fon/arkipelago-font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bad Comic';
+  src: url('/assets/fon/bad-comic-font.woff2') format('woff2'),
+       url('/assets/fon/bad-comic-font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 html {
 	overflow: hidden;
+	font-family: 'Bad Comic';
 }
 
 * {
@@ -14,14 +33,28 @@ html {
 	position: absolute;
 	border: black 3px solid;
 	background-color: lightgoldenrodyellow;
-	height: 500px;
-	width: 300px;
+	height: 550px;
+	width: 350px;
+	padding: 50px;
 	display: flex;
 	flex-direction: column;
 	top: 0px;
 	left: 0px;
 	box-shadow: 0px 0px 10px 0px black;
 	transition: rotate 0.3s cubic-bezier(0.33, 1.49, 0.98, 0.99);
+}
+
+.event-1 {
+	background-image: url("/assets/pic/report/1.png");
+}
+.event-2 {
+	background-image: url("/assets/pic/report/2.png");
+}
+.event-3 {
+	background-image: url("/assets/pic/report/3.png");
+}
+.event-4 {
+	background-image: url("/assets/pic/report/4.png");
 }
 
 .event_button {
@@ -74,4 +107,48 @@ html {
 	position: absolute;
 	top: 0px;
 	left: 0px;
+}
+
+.note {
+	position: absolute;
+	width: 250px;
+	height: 250px;
+	padding: 50px;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.note-1 {
+	background-image: url("/assets/pic/note/1.png");
+}
+.note-2 {
+	background-image: url("/assets/pic/note/2.png");
+}
+.note-3 {
+	background-image: url("/assets/pic/note/3.png");
+}
+.note-4 {
+	background-image: url("/assets/pic/note/4.png");
+}
+
+.note * {
+	margin: 0;
+	padding: 0;
+}
+
+.note_header {
+	height: 40px;
+	display: flex;
+	justify-content: right;
+}
+
+.note_text {
+	font-family: 'Arkipelago';
+	width:180px;
+	height: 140px;
+	border: none;
+	resize: none;
+	background-color: transparent;
+	padding: 10px;
+	outline: none;
 }

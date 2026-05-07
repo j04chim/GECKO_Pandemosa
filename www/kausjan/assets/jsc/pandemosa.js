@@ -1,4 +1,4 @@
-let EVENTS = []
+let EVENTS = [];
 let TIMELINE = null;
 let NETWORK = new Network("http://127.0.0.1:8080");
 let SESSION = {};
@@ -16,7 +16,7 @@ async function loadSession(id) {
 			new Event(
 				events.Events[i].title,
 				events.Events[i].summary,
-				Math.random() * 10000 % (document.body.clientWidth - 300),
+				Math.random() * 10000 % (document.body.clientWidth/2 - 300),
 				Math.random() * 10000 % (window.screen.height - 600)
 			)
 		);
@@ -41,7 +41,7 @@ async function nextDay() {
 			new Event(
 				events.Events[i].title,
 				events.Events[i].summary,
-				Math.random() * 10000 % (document.body.clientWidth - 300),
+				Math.random() * 10000 % (document.body.clientWidth/2 - 300),
 				Math.random() * 10000 % (window.screen.height - 600)
 			)
 		);
@@ -51,9 +51,18 @@ async function nextDay() {
 loadSession(4);
 
 document.getElementById("create").addEventListener("click", (e) => {
-	new Event("asdasd asd asd asd  asd fdg fd g", " sdf sf sdf sdf thdfgfASFDS SDF SDDF SDFAs dh g", Math.random() * 100, Math.random() * 100);
+	new Event("Title", "Content", Math.random() * 10000 % (document.body.clientWidth/2 - 300),
+		Math.random() * 10000 % (window.screen.height - 600));
 });
 
 document.getElementById("next").addEventListener("click", (e) => {
 	nextDay();
+});
+
+document.getElementById("note").addEventListener("click", (e) => {
+	new Note(
+		"",
+		Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,
+		Math.random() * 10000 % (window.screen.height - 300)
+	);
 });
