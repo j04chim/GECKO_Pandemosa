@@ -1,5 +1,24 @@
+@font-face {
+  font-family: 'Arkipelago';
+  src: url('/assets/fon/arkipelago-font.woff2') format('woff2'),
+       url('/assets/fon/arkipelago-font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bad Comic';
+  src: url('/assets/fon/bad-comic-font.woff2') format('woff2'),
+       url('/assets/fon/bad-comic-font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 html {
 	overflow: hidden;
+	font-family: 'Bad Comic';
 }
 
 * {
@@ -74,4 +93,36 @@ html {
 	position: absolute;
 	top: 0px;
 	left: 0px;
+}
+
+.note {
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	border: black 3px solid;
+	background-color: #ffee67;
+	box-shadow: 0px 0px 10px 0px black;
+}
+
+.note * {
+	margin: 0;
+	padding: 0;
+}
+
+.note_header {
+	height: 40px;
+	display: flex;
+	justify-content: right;
+}
+
+.note_text {
+	font-family: 'Arkipelago';
+	width:180px;
+	height: 140px;
+	border: none;
+	resize: none;
+	background-color: transparent;
+	padding: 10px;
+	outline: none;
+	font-size: 20px;
 }

@@ -7,7 +7,7 @@ class Network {
 	buildUrl(path, params = {}) {
 		const url = new URL(path, this.url);
 		Object.entries(params).forEach(([k, v]) => {
-			if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+			if (v !== undefined && v !== null) url.searchParams.set(k, v);
 		});
 		return url.toString();
 	}
