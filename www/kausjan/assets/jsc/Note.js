@@ -1,7 +1,37 @@
+let LINE = null;
+
 class Line {
 	constructor(x, y) {
-		this.start_x = x;
+		this.obj = document.createElement("div");
+		this.obj.classList.add("note_line");
+
+		document.getElementById("notes").appendChild(this.obj);
+
+		this.setStart(x, y);
+		this.setEnd(x, y);
+	}
+
+	setStart(x, y) {
+		this.start_x = x + 100;
 		this.start_y = y;
+		this.update();
+	}
+
+	setEnd(x, y) {
+		this.end_x = x + 100;
+		this.end_y = y;
+		this.update();
+	}
+
+	update() {
+		const dx = this.end_x - this.start_x;
+		const dy = this.end_y - this.start_y;
+		const length = Math.hypot(dx, dy);
+		this.obj.style.width = length + "px";
+		this.obj.style.top = this.start_y + "px";
+		this.obj.style.left = this.start_x + "px";
+		const angle = Math.atan2(dy, dx);
+		this.obj.style.transform = `rotate(${angle * 180 / Math.PI}deg)`;
 	}
 }
 
@@ -17,10 +47,14 @@ class Note {
 		this.mouseclick = false;
 		this.locked = false;
 
+		this.line_start = [];
+		this.line_end = [];
+
 		this.obj = document.createElement("div");
 		let header = document.createElement("div");
 		let content = document.createElement("div");
 		let textarea = document.createElement("textarea");
+		let dot = document.createElement("button");
 		this.button_zoom = document.createElement("button");
 
 		textarea.innerText = text;
@@ -30,12 +64,14 @@ class Note {
 		textarea.classList.add("note_text");
 		content.classList.add("note_content");
 		header.classList.add("note_header");
+		dot.classList.add("note_dot");
 		this.button_zoom.classList.add("note_zoom");
 		this.obj.classList.add("note");
 
 		this.zoom = this.zoom.bind(this);
 		this.button_zoom.addEventListener("click", this.zoom);
 
+		header.appendChild(dot);
 		header.appendChild(this.button_zoom);
 		content.appendChild(textarea);
 
@@ -46,6 +82,7 @@ class Note {
 		this.click = this.click.bind(this);
 		this.release = this.release.bind(this);
 		this.moveto = this.moveto.bind(this);
+		this.link = this.link.bind(this);
 
 		this.obj.style.left =  document.body.clientWidth + "px";
 		this.obj.style.top = window.screen.height + "px";
@@ -54,8 +91,9 @@ class Note {
 		this.obj.addEventListener("mousedown", this.click);
 		this.obj.addEventListener("mouseup", this.release);
 		this.obj.addEventListener("mouseleave", this.release);
+		dot.addEventListener("click", this.link);
 
-		document.getElementById("events").appendChild(this.obj);
+		document.getElementById("notes").appendChild(this.obj);
 
 		this.zIndex = this.obj.style.zIndex;
 
@@ -126,6 +164,13 @@ class Note {
 			this.old_mouse_x = e.pageX;
 			this.old_mouse_y = e.pageY;
 
+			this.line_start.forEach((e) => {
+				e.setStart(this.x, this.y)
+			});
+			this.line_end.forEach((e) => {
+				e.setEnd(this.x, this.y)
+			});
+
 		}
 
 	}
@@ -162,12 +207,24 @@ class Note {
 			this.obj.style.zIndex = "999";
 			this.obj.style.left = ((document.body.clientWidth / 2) - 150) + "px";
 			this.obj.style.top = ((window.screen.height / 2) - 250) + "px";
+			this.line_start.forEach((e) => {
+				e.setStart(((document.body.clientWidth / 2) - 150), ((window.screen.height / 2) - 250))
+			});
+			this.line_end.forEach((e) => {
+				e.setEnd(((document.body.clientWidth / 2) - 150), ((window.screen.height / 2) - 250))
+			});
 			document.getElementById("events").appendChild(this.background);
 		} else {
 			this.background.remove();
 			this.obj.style.zIndex = this.zIndex;
 			this.obj.style.left = this.x + "px";
 			this.obj.style.top = this.y + "px";
+			this.line_start.forEach((e) => {
+				e.setStart(this.x, this.y)
+			});
+			this.line_end.forEach((e) => {
+				e.setEnd(this.x, this.y)
+			});
 			this.locked = false;
 		}
 	}
@@ -178,6 +235,17 @@ class Note {
 
 	save() {
 
+	}
+
+	link() {
+		if (LINE == null) {
+			LINE = new Line(this.x, this.y);
+			this.line_start.push(LINE);
+		} else {
+			LINE.setEnd(this.x, this.y);
+			this.line_end.push(LINE);
+			LINE = null;
+		}
 	}
 
 	destroy() {

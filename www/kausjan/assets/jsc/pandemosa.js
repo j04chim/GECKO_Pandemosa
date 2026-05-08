@@ -66,3 +66,7 @@ document.getElementById("note").addEventListener("click", (e) => {
 		Math.random() * 10000 % (window.screen.height - 300)
 	);
 });
+
+document.addEventListener("mousemove", (e) => {
+	if (LINE) LINE.setEnd(e.pageX - 100, e.pageY);
+})
