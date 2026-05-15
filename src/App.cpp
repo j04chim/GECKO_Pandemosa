@@ -133,6 +133,37 @@ void App::run() {
 
     });
 
+    CROW_ROUTE(this->_app, "/createNoteLink").methods(crow::HTTPMethod::Get)
+        ([this](const crow::request& req) {
+
+            crow::response response;
+            response.set_header("content-type", "application/json");
+
+            std::string sd =
+                req.url_params.get("sd") ? req.url_params.get("sd") : "";
+            std::string na =
+                req.url_params.get("na") ? req.url_params.get("na") : "";
+            std::string nb =
+                req.url_params.get("nb") ? req.url_params.get("nb") : "";
+
+            if ( sd == "" || na == "" || nb == "" ) {
+
+                response.body = "{}";
+                return response;
+
+            }
+
+            int n = this->_database->insertNoteLink(
+                sd,
+                na,
+                nb
+            );
+
+            response.body = "{}";
+            return response;
+
+    });
+
     CROW_ROUTE(this->_app, "/getNotes").methods(crow::HTTPMethod::Get)
         ([this](const crow::request& req) {
 
@@ -163,6 +194,92 @@ void App::run() {
             res += "]}";
 
             response.body = res;
+            return response;
+
+    });
+
+    CROW_ROUTE(this->_app, "/getNoteLink").methods(crow::HTTPMethod::Get)
+        ([this](const crow::request& req) {
+
+            crow::response response;
+            response.set_header("content-type", "application/json");
+
+            std::string sd =
+                req.url_params.get("sd") ? req.url_params.get("sd") : "";
+
+            if ( sd == "" ) {
+
+                response.body = "{}";
+                return response;
+
+            }
+
+            std::vector<NoteLink> sn = this->_database->selectNoteLink(sd);
+
+            std::string res = "{\"NoteLink\": [";
+            for ( int i = 0; i < sn.size(); ++i ) {
+
+                res += sn[i].toJson();
+
+                if ( i + 1 != sn.size() )
+                    res += ",";
+
+            }
+            res += "]}";
+
+            response.body = res;
+            return response;
+
+    });
+
+    CROW_ROUTE(this->_app, "/deleteNote").methods(crow::HTTPMethod::Get)
+        ([this](const crow::request& req) {
+
+            crow::response response;
+            response.set_header("content-type", "application/json");
+
+            std::string sd =
+                req.url_params.get("sd") ? req.url_params.get("sd") : "";
+
+            if ( sd == "" ) {
+
+                response.body = "{}";
+                return response;
+
+            }
+
+            this->_database->deleteNote(sd);
+
+            response.body = "{}";
+            return response;
+
+    });
+
+    CROW_ROUTE(this->_app, "/updateNote").methods(crow::HTTPMethod::Get)
+        ([this](const crow::request& req) {
+
+            crow::response response;
+            response.set_header("content-type", "application/json");
+
+            std::string sd =
+                req.url_params.get("sd") ? req.url_params.get("sd") : "";
+            std::string ct =
+                req.url_params.get("ct") ? req.url_params.get("ct") : "";
+
+            if ( sd == "" || ct == "" ) {
+
+                response.body = "{}";
+                return response;
+
+            }
+
+            this->_database->updateNote(
+                sd,
+                req.url_params.get("tt") ? req.url_params.get("tt") : "",
+                ct
+            );
+
+            response.body = "{}";
             return response;
 
     });

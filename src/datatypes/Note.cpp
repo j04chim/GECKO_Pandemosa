@@ -25,3 +25,24 @@ std::string Note::toJson() {
         "\"content\": \"" + this->_content + "\"}";
 
 }
+
+NoteLink::NoteLink(
+    int session_id,
+    int note_a,
+    int note_b
+) {
+
+    this->_session_id = session_id;
+    this->_note_a = note_a;
+    this->_note_b = note_b;
+
+}
+
+std::string NoteLink::toJson() {
+
+    return
+        "{\"session_id\": \"" + std::to_string( this->_session_id ) + "\"," +
+        "\"note_a\": \"" + std::to_string( this->_note_a ) + "\"," +
+        "\"note_b\": \"" + std::to_string( this->_note_b ) + "\"}";
+
+}

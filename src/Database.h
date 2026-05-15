@@ -103,4 +103,51 @@ class Database {
             std::string new_ingame_date
         ) = 0;
 
+        /**
+        * @fn updateNote
+        * @brief Update note content.
+        * @param note_id Note's id
+        * @param title New title
+        * @param content New content
+        * @return int 0/1 success/failure
+        */
+        virtual int updateNote(
+            std::string note_id, std::string title,
+            std::string content
+        ) = 0;
+
+        /**
+        * @fn deleteNote
+        * @brief Delete a note.
+        * @param note_id Note's id
+        * @return int 0/1 success/failure
+        */
+        virtual int deleteNote(
+            std::string note_id
+        ) = 0;
+
+        /**
+        * @fn insertNoteLink
+        * @brief Link two notes.
+        * @param note_id_a first Note's id
+        * @param note_id_b second Note's id
+        * @return int 0/1 success/failure
+        */
+        virtual int insertNoteLink(
+            std::string session_id,
+            std::string note_id_a,
+            std::string note_id_b
+        ) = 0;
+
+        /**
+        * @fn selectNoteLink
+        * @brief Get links of a session.
+        * @param note_id_a first Note's id
+        * @param note_id_b second Note's id
+        * @return int 0/1 success/failure
+        */
+        virtual std::vector<NoteLink> selectNoteLink(
+            std::string session_id
+        ) = 0;
+
 };

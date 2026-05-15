@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="12.327642mm"
+   height="10.960441mm"
+   viewBox="0 0 12.327642 10.960441"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+     id="defs1" /><g
+     id="layer1"
+     transform="translate(-70.395341,-130.3599)"><rect
+       style="fill:#ffee67;fill-opacity:1;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect1"
+       width="10"
+       height="10"
+       x="72.177032"
+       y="130.6599" /><path
+       id="rect2"
+       style="fill:#ffa367;fill-opacity:1;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       d="m 70.741381,138.79931 11.681602,-0.0113 v 2.17245 c 0.02095,0 -5.260325,0.0764 -10.325842,0.0566 -1.784989,-0.099 -1.35576,-2.21771 -1.35576,-2.21771 z" /><path
+       id="rect2-2"
+       style="fill:#ff6b67;fill-opacity:1;stroke:none;stroke-width:0.189247;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+       d="m 82.403253,140.41991 c 0.0309,0.89446 0.01763,0.55011 0.01763,0.55011 0.02093,0 -5.254211,0.0598 -10.313838,0.0489 -1.281143,-0.0859 -1.36822,-1.02593 -1.419668,-1.80449 0.924697,1.65789 3.052246,1.34931 11.715868,1.20551 z" /><path
+       d="m 77.680497,134.18381 h 2.749782 v 0.98108 h -2.749782 v 2.84651 h -0.994896 v -2.84651 h -2.749782 v -0.98108 h 2.749782 v -2.86032 h 0.994896 z"
+       id="text2"
+       style="font-size:13.818px;fill:#ffa367;stroke:#000000;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;paint-order:stroke fill markers"
+       aria-label="+" /><path
+       id="rect3"
+       style="fill:#ffd267;fill-opacity:1;stroke-width:0.294724;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+       d="m 72.175861,138.32977 c 9.57051,-0.058 10.082623,1.28943 9.988909,-7.65379 -0.0385,4.05366 0,7.80326 0,7.80326 h -9.962329 c 0,0 -0.01697,0.0401 -0.02659,-0.14947 z" /></g></svg>

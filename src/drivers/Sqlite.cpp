@@ -115,8 +115,14 @@ std::vector<Event> Sqlite::selectEvents(
                     std::string()
             );
 
-            if ( 0 == tmp.getId() )
+            if ( 0 == tmp.getId() ) {
+
+                logger( 0,
+                    ( "Queried session " + id ).c_str()
+                );
                 return result;
+
+            }
 
             result.push_back(tmp);
 
@@ -160,9 +166,6 @@ Session Sqlite::insertSession(
     int code = sqlite3_step( st );
     int id = sqlite3_last_insert_rowid(this->_db);
 
-    if ( code == SQLITE_DONE )
-        logger( 0, "Inserted new session in database" );
-
     if ( code == SQLITE_ERROR )
         logger( 1,
             ( std::string( "Failed to execute request, SQLITE_ERROR: ") +
@@ -174,6 +177,10 @@ Session Sqlite::insertSession(
         creation_date,
         ingame_date,
         0
+    );
+
+    logger( 0,
+        ( "Inserted new session " + std::to_string( id ) ).c_str()
     );
 
     return res;
@@ -204,14 +211,16 @@ int Sqlite::insertAction(
     int code = sqlite3_step( st );
     int id = sqlite3_last_insert_rowid(this->_db);
 
-    if ( code == SQLITE_DONE )
-        logger( 0, "Inserted new action in database" );
-
     if ( code == SQLITE_ERROR )
         logger( 1,
             ( std::string( "Failed to execute request, SQLITE_ERROR: ") +
             sqlite3_errmsg( this->_db ) ).c_str()
         );
+
+    logger( 0,
+        ( "Inserted new action " + std::to_string( id ) +
+        " in database for session " + session_id ).c_str()
+    );
 
     return id;
 
@@ -239,9 +248,6 @@ Note Sqlite::insertNote(
     int code = sqlite3_step( st );
     int id = sqlite3_last_insert_rowid(this->_db);
 
-    if ( code == SQLITE_DONE )
-        logger( 0, "Inserted new note in database" );
-
     if ( code == SQLITE_ERROR )
         logger( 1,
             ( std::string( "Failed to execute request, SQLITE_ERROR: ") +
@@ -253,6 +259,10 @@ Note Sqlite::insertNote(
         std::stoi(session_id),
         title,
         content
+    );
+
+    logger( 0,
+        ( "Inserted new note in database for session " + session_id ).c_str()
     );
 
     return res;
@@ -272,6 +282,10 @@ Session Sqlite::selectSession( std::string id ) {
     while ( code == SQLITE_ROW || code == SQLITE_BUSY ) {
 
         if ( code == SQLITE_ROW  ) {
+
+            logger( 0,
+                ( "Queried session " + id ).c_str()
+            );
 
             return Session(
                 sqlite3_column_int(st, 0),
@@ -331,8 +345,15 @@ std::vector<Note> Sqlite::selectNotes(
                     std::string()
             );
 
-            if ( 0 == tmp.getId() )
+            if ( 0 == tmp.getId() ) {
+
+                logger( 0,
+                    ( "Queried " + std::to_string( result.size() ) + " notes for " +
+                    session_id ).c_str()
+                );
                 return result;
+
+            }
 
             result.push_back(tmp);
 
@@ -344,7 +365,7 @@ std::vector<Note> Sqlite::selectNotes(
 
     if ( code == SQLITE_ERROR )
         logger( 1,
-            ( std::string( "Failed to execute request, SQLITE_ERROR: ") +
+            ( std::string( "Failed to get notes, SQLITE_ERROR: ") +
             sqlite3_errmsg( this->_db ) ).c_str()
         );
 
@@ -371,21 +392,181 @@ int Sqlite::updateSession(
     int code = sqlite3_step( st );
     int id = sqlite3_last_insert_rowid(this->_db);
 
-    if ( code == SQLITE_DONE ) {
-        logger(
-            0, ("Updated session " + session_id + " in-game date to " +
-            new_ingame_date).c_str()
+    if ( code == SQLITE_ERROR ) {
+
+        logger( 1,
+            ( std::string( "Failed to update session, SQLITE_ERROR: ") +
+            sqlite3_errmsg( this->_db ) ).c_str()
         );
-        return 0;
+        return 1;
+
     }
 
+    logger( 0,
+        ("Updated session " + session_id + " in-game date to " +
+        new_ingame_date).c_str()
+    );
+
+    return 0;
+
+}
+
+int Sqlite::updateNote(
+    std::string note_id, std::string title,
+    std::string content
+) {
+
+        sqlite3_stmt* st;
+
+    std::string sql =
+        "UPDATE Note SET title = ?1, content = ?2 WHERE id = ?3";
+    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
+
+    sqlite3_bind_text(
+        st, 1, title.c_str(), title.size(), SQLITE_TRANSIENT
+    );
+    sqlite3_bind_text(
+        st, 2, content.c_str(), content.size(), SQLITE_TRANSIENT
+    );
+    sqlite3_bind_int( st, 3, std::stoi(note_id) );
+
+    int code = sqlite3_step( st );
+    int id = sqlite3_last_insert_rowid(this->_db);
+
+    if ( code == SQLITE_ERROR ) {
+
+        logger( 1,
+            ( std::string( "Failed to update note, SQLITE_ERROR: ") +
+            sqlite3_errmsg( this->_db ) ).c_str()
+        );
+        return 1;
+
+    }
+
+    logger( 0, ( "Updated note " + note_id ).c_str() );
+
+    return 0;
+
+}
+
+int Sqlite::deleteNote(
+    std::string note_id
+) {
+
+    sqlite3_stmt* st;
+
+    std::string sql =
+        "DELETE FROM Note WHERE id = ?1";
+    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
+
+    sqlite3_bind_int( st, 1, std::stoi(note_id) );
+
+    int code = sqlite3_step( st );
+    int id = sqlite3_last_insert_rowid(this->_db);
+
+    if ( code == SQLITE_ERROR ) {
+
+        logger( 1,
+            ( std::string( "Failed to delete note, SQLITE_ERROR: ") +
+            sqlite3_errmsg( this->_db ) ).c_str()
+        );
+        return 1;
+
+    }
+
+    logger( 0, ( "Deleted note " + note_id ).c_str() );
+
+    return 0;
+
+}
+
+int Sqlite::insertNoteLink(
+    std::string session_id,
+    std::string note_id_a,
+    std::string note_id_b
+) {
+
+    sqlite3_stmt* st;
+
+    std::string sql =
+        "INSERT INTO NoteLink (session_id, note_a, note_b) VALUES (?1, ?2, ?3)";
+    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
+
+    sqlite3_bind_int( st, 1, std::stoi(session_id) );
+    sqlite3_bind_int( st, 2, std::stoi(note_id_a) );
+    sqlite3_bind_int( st, 3, std::stoi(note_id_b) );
+
+    int code = sqlite3_step( st );
+
+    if ( code == SQLITE_ERROR ) {
+
+        logger( 1,
+            ( std::string( "Failed to execute request, SQLITE_ERROR: " ) +
+            sqlite3_errmsg( this->_db ) ).c_str()
+        );
+        return 1;
+
+    }
+
+    logger( 0,
+        ( "Inserted new note link in database for session " + session_id ).c_str()
+    );
+
+    return 0;
+
+}
+
+std::vector<NoteLink> Sqlite::selectNoteLink(
+    std::string session_id
+) {
+
+    std::vector<NoteLink> result;
+
+    if ( session_id == "" )
+        return result;
+
+    sqlite3_stmt* st;
+    std::string sql = "SELECT * FROM NoteLink WHERE session_id = ?1 ";
+
+    sqlite3_prepare_v2( this->_db, sql.c_str(), -1, &st, NULL);
+
+    sqlite3_bind_int( st, 1, std::stoi(session_id) );
+
+    int code = sqlite3_step( st );
+    while ( code == SQLITE_ROW || code == SQLITE_BUSY ) {
+
+        if ( code == SQLITE_ROW ) {
+
+            NoteLink tmp(
+                sqlite3_column_int(st, 0),
+                sqlite3_column_int(st, 1),
+                sqlite3_column_int(st, 2)
+            );
+
+            if ( 0 == tmp.getSessionId() ) {
+
+                logger( 0,
+                    ( "Queried " + std::to_string( result.size() ) + " notes for " +
+                    session_id ).c_str()
+                );
+                return result;
+
+            }
+
+            result.push_back(tmp);
+
+        }
+
+        int code = sqlite3_step( st );
+
+    }
 
     if ( code == SQLITE_ERROR )
         logger( 1,
-            ( std::string( "Failed to execute request, SQLITE_ERROR: ") +
+            ( std::string( "Failed to get notes, SQLITE_ERROR: ") +
             sqlite3_errmsg( this->_db ) ).c_str()
         );
 
-    return 1;
+    return result;
 
 }

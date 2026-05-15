@@ -38,3 +38,40 @@ class Note {
         std::string _content;
 
 };
+
+
+/**
+ * @class NoteLink
+ * @brief NoteLink data model
+ */
+class NoteLink {
+
+    public:
+
+        NoteLink(
+          int session_id,
+          int note_a,
+          int note_b
+        );
+
+        /**
+         * @fn toJson
+         * @brief Return a JSON string representing the object.
+         * @return std::string JSON string
+         */
+        std::string toJson();
+
+        /**
+         * @fn getSessionId
+         * @brief Return object's id
+         * @return int id of the object
+         */
+        int getSessionId() { return this->_session_id; }
+
+    private:
+
+        int _session_id;
+        int _note_a;
+        int _note_b;
+
+};

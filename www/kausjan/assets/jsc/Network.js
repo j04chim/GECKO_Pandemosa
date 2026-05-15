@@ -52,6 +52,46 @@ class Network {
 		return this.getJson(url);
 	}
 
+	createNoteLink({ sd, na, nb } = {}) {
+		if (!sd)
+			return Promise.reject(new Error('sessionId is required'));
+		const url = this.buildUrl('/createNoteLink', {
+			sd,
+			na,
+			nb
+		});
+		return this.getJson(url);
+	}
+
+	getNoteLink({ sd } = {}) {
+		if (!sd)
+			return Promise.reject(new Error('sessionId is required'));
+		const url = this.buildUrl('/getNoteLink', {
+			sd
+		});
+		return this.getJson(url);
+	}
+
+	deleteNote({ sd } = {}) {
+		if (!sd)
+			return Promise.reject(new Error('sessionId is required'));
+		const url = this.buildUrl('/deleteNote', {
+			sd,
+		});
+		return this.getJson(url);
+	}
+
+	updateNote({ sd, tt, ct } = {}) {
+		if (!sd)
+			return Promise.reject(new Error('sessionId is required'));
+		const url = this.buildUrl('/updateNote', {
+			sd,
+			tt,
+			ct
+		});
+		return this.getJson(url);
+	}
+
 	getNotes(sd) {
 		if (sd === undefined || sd === null)
 			return Promise.reject(new Error('sessionId is required'));

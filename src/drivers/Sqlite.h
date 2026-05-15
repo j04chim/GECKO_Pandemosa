@@ -110,6 +110,53 @@ class Sqlite: public Database {
             std::string new_ingame_date
         ) override;
 
+        /**
+        * @fn updateNote
+        * @brief Update note content.
+        * @param note_id Note's id
+        * @param title New title
+        * @param content New content
+        * @return int 0/1 success/failure
+        */
+        virtual int updateNote(
+            std::string note_id, std::string title,
+            std::string content
+        ) override;
+
+        /**
+        * @fn deleteNote
+        * @brief Delete a note.
+        * @param note_id Note's id
+        * @return int 0/1 success/failure
+        */
+        virtual int deleteNote(
+            std::string note_id
+        ) override;
+
+        /**
+        * @fn insertNoteLink
+        * @brief Link two notes.
+        * @param note_id_a first Note's id
+        * @param note_id_b second Note's id
+        * @return int 0/1 success/failure
+        */
+        virtual int insertNoteLink(
+            std::string session_id,
+            std::string note_id_a,
+            std::string note_id_b
+        ) override;
+
+        /**
+        * @fn selectNoteLink
+        * @brief Get links of a session.
+        * @param note_id_a first Note's id
+        * @param note_id_b second Note's id
+        * @return std::vector<NoteLink> NoteLink
+        */
+        virtual std::vector<NoteLink> selectNoteLink(
+            std::string session_id
+        ) override;
+
     private:
 
         sqlite3* _db;

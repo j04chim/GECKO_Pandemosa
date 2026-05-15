@@ -26,7 +26,6 @@ class Event {
 		description.innerText = desc;
 		button_act.innerText = "Act";
 		button_pass.innerText = "Pass";
-		this.button_zoom.innerText = "Zoom";
 
 		button_act.classList.add("event_button");
 		button_act.classList.add("event_act");

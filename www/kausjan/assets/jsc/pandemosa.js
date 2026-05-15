@@ -59,7 +59,7 @@ document.getElementById("next").addEventListener("click", (e) => {
 	nextDay();
 });
 
-document.getElementById("note").addEventListener("click", (e) => {
+document.getElementById("addnote").addEventListener("click", (e) => {
 	new Note(
 		"",
 		Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,

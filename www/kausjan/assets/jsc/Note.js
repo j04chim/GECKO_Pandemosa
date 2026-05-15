@@ -5,7 +5,7 @@ class Line {
 		this.obj = document.createElement("div");
 		this.obj.classList.add("note_line");
 
-		document.getElementById("notes").appendChild(this.obj);
+		document.getElementById("lines").appendChild(this.obj);
 
 		this.setStart(x, y);
 		this.setEnd(x, y);
@@ -58,8 +58,6 @@ class Note {
 		this.button_zoom = document.createElement("button");
 
 		textarea.innerText = text;
-
-		this.button_zoom.innerText = "Zoom";
 
 		textarea.classList.add("note_text");
 		content.classList.add("note_content");
