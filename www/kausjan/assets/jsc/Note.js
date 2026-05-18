@@ -37,7 +37,7 @@ class Line {
 
 class Note {
 
-	constructor(text, x, y) {
+	constructor(text, x, y, network) {
 
 		this.x = document.body.clientWidth;
 		this.y = (Math.random() * 10000) % window.screen.height;
@@ -46,6 +46,7 @@ class Note {
 		this.old_mouse_y = -1;
 		this.mouseclick = false;
 		this.locked = false;
+        this.network = network;
 
 		this.line_start = [];
 		this.line_end = [];
@@ -56,6 +57,7 @@ class Note {
 		let textarea = document.createElement("textarea");
 		let dot = document.createElement("button");
 		this.button_zoom = document.createElement("button");
+        let button_delete = document.createElement("button");
 
 		textarea.innerText = text;
 
@@ -65,11 +67,15 @@ class Note {
 		dot.classList.add("note_dot");
 		this.button_zoom.classList.add("note_zoom");
 		this.obj.classList.add("note");
+        button_delete.classList.add("note_delete");
+        button_delete.classList.add("button");
+        this.button_zoom.classList.add("button");
 
 		this.zoom = this.zoom.bind(this);
 		this.button_zoom.addEventListener("click", this.zoom);
 
 		header.appendChild(dot);
+        header.appendChild(button_delete);
 		header.appendChild(this.button_zoom);
 		content.appendChild(textarea);
 
@@ -94,6 +100,8 @@ class Note {
 		document.getElementById("notes").appendChild(this.obj);
 
 		this.zIndex = this.obj.style.zIndex;
+
+        this.info = this.network.createNote(tt = "", ct = text);
 
 		this.moveto(x, y, 60)
 
@@ -151,6 +159,8 @@ class Note {
 
 	mousemoveto(e) {
 
+        e.preventDefault();
+
 		if ( !this.locked && this.mouseclick ) {
 
 			let mvx = e.pageX - this.old_mouse_x;
@@ -174,6 +184,9 @@ class Note {
 	}
 
 	click(e) {
+
+        e.preventDefault();
+
 		if ( !this.locked ) {
 				this.mouseclick = true;
 			this.old_mouse_x = e.pageX;
@@ -247,6 +260,7 @@ class Note {
 	}
 
 	destroy() {
+        this.info = this.network.deleteNote(sd = this.info.id);
 		this.obj.remove();
 	}
 

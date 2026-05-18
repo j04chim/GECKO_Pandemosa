@@ -9,20 +9,15 @@
 	</head>
 	<body>
 
-		<div id="lines"></div>
-
-		<div id="notes"></div>
-
-		<div id="events"></div>
-
-		<div id="timeline"></div>
-
-		<button id="addnote" ></button>
-
 		<script src="/assets/jsc/Network.js"></script>
 		<script src="/assets/jsc/Note.js"></script>
 		<script src="/assets/jsc/Event.js"></script>
 		<script src="/assets/jsc/Timeline.js"></script>
-		<script src="/assets/jsc/pandemosa.js"></script>
+		<script src="/assets/jsc/Pandemosa.js"></script>
+		<script>
+            let pandemosa = new Pandemosa("http://127.0.0.1:8080/");
+            pandemosa.display();
+            pandemosa.loadGame(1);
+		</script>
     </body>
 </html>

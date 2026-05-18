@@ -37,6 +37,7 @@ class Event {
 		content.classList.add("event_content");
 		header.classList.add("event_header");
 		this.button_zoom.classList.add("event_zoom");
+        this.button_zoom.classList.add("button");
 		this.obj.classList.add("event");
 
 		this.zoom = this.zoom.bind(this);
@@ -128,6 +129,8 @@ class Event {
 
 	mousemoveto(e) {
 
+        e.preventDefault();
+
 		if ( !this.locked && this.mouseclick ) {
 
 			let mvx = e.pageX - this.old_mouse_x;
@@ -154,6 +157,9 @@ class Event {
 	}
 
 	click(e) {
+
+        e.preventDefault();
+
 		if ( !this.locked ) {
 				this.mouseclick = true;
 			this.old_mouse_x = e.pageX;

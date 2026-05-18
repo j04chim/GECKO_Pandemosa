@@ -27,6 +27,8 @@ class Pandemosa {
         let month = parseInt(this.session.ingame_date.split("-")[1]);
         let year = parseInt(this.session.ingame_date.split("-")[0]);
         this.current_date = new Date(year, month, day);
+        console.log(this.session);
+
     }
 
     async loadEvents() {
@@ -75,6 +77,18 @@ class Pandemosa {
 
     }
 
+    async createNewGame() {
+        await this.createSession();
+        await this.loadEvents();
+        this.loadTimeline();
+    }
+
+    async loadGame(id) {
+        await this.loadSession(id);
+        await this.loadEvents();
+        this.loadTimeline();
+    }
+
     display() {
 
         this.obj = document.createElement("div");
@@ -85,12 +99,24 @@ class Pandemosa {
         let buttons = document.createElement("div");
         let addnote = document.createElement("button");
 
+        addnote.addEventListener("click", (e) => {
+            new Note(
+                "",
+                Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,
+                Math.random() * 10000 % (window.screen.height - 300)
+            );
+        });
+        document.addEventListener("mousemove", (e) => {
+            if (LINE) LINE.setEnd(e.pageX - 100, e.pageY);
+        })
+
         lines.id = "lines";
         notes.id = "notes";
         events.id = "events";
         timeline.id = "timeline";
         addnote.id = "addnote";
         buttons.id = "buttonbar";
+        this.obj.id = "pandemosa";
 
         buttons.appendChild(addnote);
 
@@ -99,6 +125,8 @@ class Pandemosa {
         this.obj.appendChild(events);
         this.obj.appendChild(timeline);
         this.obj.appendChild(buttons);
+
+        document.body.appendChild(this.obj);
 
     }
 

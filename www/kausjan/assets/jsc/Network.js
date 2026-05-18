@@ -1,7 +1,8 @@
 class Network {
 
-	constructor(url) {
+	constructor(url, sid) {
 		this.url = url;
+        this.sid = sid;
 	}
 
 	buildUrl(path, params = {}) {
@@ -38,10 +39,11 @@ class Network {
 		if (id === undefined || id === null)
 			return Promise.reject(new Error('id is required'));
 		const url = this.buildUrl('/getSession', { id });
+        this.sid = id;
 		return this.getJson(url);
 	}
 
-	createNote({ sd, tt, ct } = {}) {
+	createNote({ sd = this.sid, tt, ct } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/createNote', {
@@ -52,7 +54,7 @@ class Network {
 		return this.getJson(url);
 	}
 
-	createNoteLink({ sd, na, nb } = {}) {
+	createNoteLink({ sd = this.sid, na, nb } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/createNoteLink', {
@@ -63,7 +65,7 @@ class Network {
 		return this.getJson(url);
 	}
 
-	getNoteLink({ sd } = {}) {
+	getNoteLink({ sd = this.sid } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/getNoteLink', {
@@ -72,7 +74,7 @@ class Network {
 		return this.getJson(url);
 	}
 
-	deleteNote({ sd } = {}) {
+	deleteNote({ sd = this.sid } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/deleteNote', {
