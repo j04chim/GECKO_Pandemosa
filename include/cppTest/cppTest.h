@@ -85,6 +85,12 @@ class CppTest {
          */
         void display();
 
+        /**
+         * @fn success
+         * @brief Inform is any test has failed.
+         */
+        bool success() { return (this->_total_tests - this->_passed_tests) == 0; };
+
     private:
 
         int _total_tests;

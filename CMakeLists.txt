@@ -39,6 +39,8 @@ target_link_libraries( Kausjan_test sqlite3 )
 target_sources( Kausjan_test
     PRIVATE
         test/main.cpp
+        test/config.cpp
+        src/datatypes/Config.cpp
         include/cppTest/cppTest.cpp
         include/logger/logger.cpp
 )
@@ -48,4 +50,5 @@ target_include_directories( Kausjan_test
         include/Crow
         include/cppTest
         include/logger
+        src
 )

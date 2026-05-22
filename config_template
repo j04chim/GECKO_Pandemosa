@@ -1,0 +1,3 @@
+port=8080
+driver=sqlite
+database=../../data/sqlite.db

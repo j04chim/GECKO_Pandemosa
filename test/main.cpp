@@ -1,18 +1,15 @@
-#include "cppTest.h"
-#include "logger.h"
+#include "config.h"
 
 int main() {
 
-    CppTest t;
+    CppTest* t = new CppTest();
 
-    logger( 0, "Test" );
-    logger( 1, "Test" );
-    logger( 2, "Test" );
-    logger( 3, "Test" );
-    t.test( 1 != 1, "root", "1 == 1");
+    TestConfig config(t);
 
-    t.display();
+    t->display();
 
-    return 0;
+    if (t->success())
+        return 0;
+    return 1;
 
 }

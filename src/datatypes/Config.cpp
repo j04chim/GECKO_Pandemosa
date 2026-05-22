@@ -55,7 +55,7 @@ std::string Config::get( std::string s ) {
 
 std::string Config::get( int i ) {
 
-    if ( i > 0 && this->size() < i )
+    if ( i >= 0 && i < this->size() )
         return this->_values[i];
 
     logger(

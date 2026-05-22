@@ -37,7 +37,7 @@ class Line {
 
 class Note {
 
-	constructor(text, x, y, network) {
+	constructor(text, x, y) {
 
 		this.x = document.body.clientWidth;
 		this.y = (Math.random() * 10000) % window.screen.height;
@@ -46,7 +46,7 @@ class Note {
 		this.old_mouse_y = -1;
 		this.mouseclick = false;
 		this.locked = false;
-        this.network = network;
+        // this.network = network;
 
 		this.line_start = [];
 		this.line_end = [];
@@ -101,7 +101,7 @@ class Note {
 
 		this.zIndex = this.obj.style.zIndex;
 
-        this.info = this.network.createNote(tt = "", ct = text);
+        // this.info = this.network.createNote(tt = "", ct = text);
 
 		this.moveto(x, y, 60)
 
@@ -158,9 +158,6 @@ class Note {
 	}
 
 	mousemoveto(e) {
-
-        e.preventDefault();
-
 		if ( !this.locked && this.mouseclick ) {
 
 			let mvx = e.pageX - this.old_mouse_x;
@@ -184,9 +181,6 @@ class Note {
 	}
 
 	click(e) {
-
-        e.preventDefault();
-
 		if ( !this.locked ) {
 				this.mouseclick = true;
 			this.old_mouse_x = e.pageX;
@@ -260,7 +254,7 @@ class Note {
 	}
 
 	destroy() {
-        this.info = this.network.deleteNote(sd = this.info.id);
+        // this.info = this.network.deleteNote(sd = this.info.id);
 		this.obj.remove();
 	}
 
