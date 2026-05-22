@@ -3,6 +3,7 @@ class Pandemosa {
     constructor(url) {
 
         this.events = [];
+        this.notes = [];
         this.timeline = null;
         this.network = new Network("http://127.0.0.1:8080");
         this.session = null;
@@ -53,6 +54,42 @@ class Pandemosa {
 
     }
 
+    async loadNotes() {
+
+        let notes = await this.network.getNotes();
+        for ( let i = 0; i < notes.Notes.length; ++i ) {
+            this.notes.push(
+                new Note(
+                    notes.Notes[i].content,
+                    Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,
+                    Math.random() * 10000 % (window.screen.height - 300),
+                    this.network,
+                    notes.Notes[i].id
+                )
+            );
+
+        };
+        this.notes.forEach((n) => {
+            n.loaded = false;
+        });
+         let notelink = await this.network.getNoteLink();
+         for ( let i = 0; i < notelink.NoteLink.length; ++i ) {
+            this.notes.forEach((n) => {
+                if (n.id == notelink.NoteLink[i].note_a ||
+                    n.id == notelink.NoteLink[i].note_b
+                ) {
+                    n.link();
+                }
+            });
+            if (LINE)
+                LINE.destroy();
+            LINE = null;
+         };
+        this.notes.forEach((n) => {
+            n.loaded = true;
+        });
+    }
+
     async nextDay() {
         this.timeline.next();
         this.current_date.setDate(this.current_date.getDate() + 1);
@@ -78,7 +115,7 @@ class Pandemosa {
     }
 
     async createNewGame() {
-        await this.createSession();
+        await this.newSession();
         await this.loadEvents();
         this.loadTimeline();
     }
@@ -86,6 +123,7 @@ class Pandemosa {
     async loadGame(id) {
         await this.loadSession(id);
         await this.loadEvents();
+        await this.loadNotes();
         this.loadTimeline();
     }
 
@@ -103,7 +141,8 @@ class Pandemosa {
             new Note(
                 "",
                 Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,
-                Math.random() * 10000 % (window.screen.height - 300)
+                Math.random() * 10000 % (window.screen.height - 300),
+                this.network
             );
         });
         document.addEventListener("mousemove", (e) => {

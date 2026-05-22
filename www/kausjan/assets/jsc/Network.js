@@ -32,7 +32,9 @@ class Network {
 
 	createSession(params = {}) {
 		const url = this.buildUrl('/createSession');
-		return this.getJson(url);
+        let json = this.getJson(url);
+        this.sid = json.id;
+		return json;
 	}
 
 	getSession(id) {
@@ -74,27 +76,27 @@ class Network {
 		return this.getJson(url);
 	}
 
-	deleteNote({ sd = this.sid } = {}) {
-		if (!sd)
+	deleteNote({ nid } = {}) {
+		if (!nid)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/deleteNote', {
-			sd,
+			nid,
 		});
 		return this.getJson(url);
 	}
 
-	updateNote({ sd, tt, ct } = {}) {
-		if (!sd)
+	updateNote({ nid, tt, ct } = {}) {
+		if (!nid)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/updateNote', {
-			sd,
+			nid,
 			tt,
 			ct
 		});
 		return this.getJson(url);
 	}
 
-	getNotes(sd) {
+	getNotes({sd = this.sid} = {}) {
 		if (sd === undefined || sd === null)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/getNotes', { sd });

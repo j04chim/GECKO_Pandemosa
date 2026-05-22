@@ -112,10 +112,8 @@ void App::run() {
 
             std::string sd =
                 req.url_params.get("sd") ? req.url_params.get("sd") : "";
-            std::string ct =
-                req.url_params.get("ct") ? req.url_params.get("ct") : "";
 
-            if ( sd == "" || ct == "" ) {
+            if ( sd == "" ) {
 
                 response.body = "{}";
                 return response;
@@ -125,7 +123,7 @@ void App::run() {
             Note n = this->_database->insertNote(
                 sd,
                 req.url_params.get("tt") ? req.url_params.get("tt") : "",
-                ct
+                req.url_params.get("ct") ? req.url_params.get("ct") : ""
             );
 
             response.body = n.toJson();
@@ -238,17 +236,17 @@ void App::run() {
             crow::response response;
             response.set_header("content-type", "application/json");
 
-            std::string sd =
-                req.url_params.get("sd") ? req.url_params.get("sd") : "";
+            std::string nid =
+                req.url_params.get("nid") ? req.url_params.get("nid") : "";
 
-            if ( sd == "" ) {
+            if ( nid == "" ) {
 
                 response.body = "{}";
                 return response;
 
             }
 
-            this->_database->deleteNote(sd);
+            this->_database->deleteNote(nid);
 
             response.body = "{}";
             return response;
@@ -261,12 +259,12 @@ void App::run() {
             crow::response response;
             response.set_header("content-type", "application/json");
 
-            std::string sd =
-                req.url_params.get("sd") ? req.url_params.get("sd") : "";
+            std::string nid =
+                req.url_params.get("nid") ? req.url_params.get("nid") : "";
             std::string ct =
                 req.url_params.get("ct") ? req.url_params.get("ct") : "";
 
-            if ( sd == "" || ct == "" ) {
+            if ( nid == "" || ct == "" ) {
 
                 response.body = "{}";
                 return response;
@@ -274,7 +272,7 @@ void App::run() {
             }
 
             this->_database->updateNote(
-                sd,
+                nid,
                 req.url_params.get("tt") ? req.url_params.get("tt") : "",
                 ct
             );

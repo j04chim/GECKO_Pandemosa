@@ -1,9 +1,10 @@
 let LINE = null;
 
 class Line {
-	constructor(x, y) {
+	constructor(x, y, id) {
 		this.obj = document.createElement("div");
 		this.obj.classList.add("note_line");
+        this.nota_a_id = id;
 
 		document.getElementById("lines").appendChild(this.obj);
 
@@ -33,11 +34,15 @@ class Line {
 		const angle = Math.atan2(dy, dx);
 		this.obj.style.transform = `rotate(${angle * 180 / Math.PI}deg)`;
 	}
+
+	destroy() {
+        this.obj.remove();
+    }
 }
 
 class Note {
 
-	constructor(text, x, y) {
+	constructor(text, x, y, network, id = null) {
 
 		this.x = document.body.clientWidth;
 		this.y = (Math.random() * 10000) % window.screen.height;
@@ -46,7 +51,9 @@ class Note {
 		this.old_mouse_y = -1;
 		this.mouseclick = false;
 		this.locked = false;
-        // this.network = network;
+        this.network = network;
+        this.id = id;
+        this.content = text;
 
 		this.line_start = [];
 		this.line_end = [];
@@ -54,14 +61,14 @@ class Note {
 		this.obj = document.createElement("div");
 		let header = document.createElement("div");
 		let content = document.createElement("div");
-		let textarea = document.createElement("textarea");
+		this.textarea = document.createElement("textarea");
 		let dot = document.createElement("button");
 		this.button_zoom = document.createElement("button");
         let button_delete = document.createElement("button");
 
-		textarea.innerText = text;
+		this.textarea.innerText = text;
 
-		textarea.classList.add("note_text");
+		this.textarea.classList.add("note_text");
 		content.classList.add("note_content");
 		header.classList.add("note_header");
 		dot.classList.add("note_dot");
@@ -77,7 +84,7 @@ class Note {
 		header.appendChild(dot);
         header.appendChild(button_delete);
 		header.appendChild(this.button_zoom);
-		content.appendChild(textarea);
+		content.appendChild(this.textarea);
 
 		this.obj.appendChild(header);
 		this.obj.appendChild(content);
@@ -87,6 +94,8 @@ class Note {
 		this.release = this.release.bind(this);
 		this.moveto = this.moveto.bind(this);
 		this.link = this.link.bind(this);
+        this.deleteButton = this.deleteButton.bind(this);
+        this.edit = this.edit.bind(this);
 
 		this.obj.style.left =  document.body.clientWidth + "px";
 		this.obj.style.top = window.screen.height + "px";
@@ -95,15 +104,19 @@ class Note {
 		this.obj.addEventListener("mousedown", this.click);
 		this.obj.addEventListener("mouseup", this.release);
 		this.obj.addEventListener("mouseleave", this.release);
+        this.textarea.addEventListener("blur", this.edit);
 		dot.addEventListener("click", this.link);
+        button_delete.addEventListener("click", this.deleteButton);
 
 		document.getElementById("notes").appendChild(this.obj);
 
 		this.zIndex = this.obj.style.zIndex;
 
-        // this.info = this.network.createNote(tt = "", ct = text);
+        if (this.id == null)
+            this.id = this.network.createNote({tt: "", ct: text}).id;
 
 		this.moveto(x, y, 60)
+        this.loaded = true;
 
 	}
 
@@ -152,6 +165,12 @@ class Note {
 			this.y = startY + (y - startY) * t;
 			this.obj.style.left = this.x + "px";
 			this.obj.style.top = this.y + "px";
+			this.line_start.forEach((e) => {
+				e.setStart(this.x, this.y)
+			});
+			this.line_end.forEach((e) => {
+				e.setEnd(this.x, this.y)
+			});
 			if (frame < duration) requestAnimationFrame(animate);
 		};
 		requestAnimationFrame(animate);
@@ -235,26 +254,43 @@ class Note {
 	}
 
 	edit() {
-
-	}
-
-	save() {
-
+        if (this.content != this.textarea.value) {
+            this.network.updateNote({nid: this.id, ct: this.textarea.value});
+            this.content = this.textarea.value;
+        }
 	}
 
 	link() {
 		if (LINE == null) {
-			LINE = new Line(this.x, this.y);
+			LINE = new Line(this.x, this.y, this.id);
 			this.line_start.push(LINE);
 		} else {
 			LINE.setEnd(this.x, this.y);
 			this.line_end.push(LINE);
+            if (this.loaded)
+                this.network.createNoteLink({na: LINE.nota_a_id, nb: this.id});
 			LINE = null;
 		}
 	}
 
+	deleteButton() {
+        this.line_start.forEach((e) => {
+            e.destroy();
+        });
+        this.line_end.forEach((e) => {
+            e.destroy();
+        });
+        this.obj.remove();
+        this.network.deleteNote({nid: this.id});
+    }
+
 	destroy() {
-        // this.info = this.network.deleteNote(sd = this.info.id);
+        this.line_start.forEach((e) => {
+            e.destroy();
+        });
+        this.line_end.forEach((e) => {
+            e.destroy();
+        });
 		this.obj.remove();
 	}
 

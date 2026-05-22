@@ -546,7 +546,7 @@ std::vector<NoteLink> Sqlite::selectNoteLink(
             if ( 0 == tmp.getSessionId() ) {
 
                 logger( 0,
-                    ( "Queried " + std::to_string( result.size() ) + " notes for " +
+                    ( "Queried " + std::to_string( result.size() ) + " note links for " +
                     session_id ).c_str()
                 );
                 return result;
@@ -563,7 +563,7 @@ std::vector<NoteLink> Sqlite::selectNoteLink(
 
     if ( code == SQLITE_ERROR )
         logger( 1,
-            ( std::string( "Failed to get notes, SQLITE_ERROR: ") +
+            ( std::string( "Failed to get note links, SQLITE_ERROR: ") +
             sqlite3_errmsg( this->_db ) ).c_str()
         );
 
