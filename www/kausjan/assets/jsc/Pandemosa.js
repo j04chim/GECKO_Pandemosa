@@ -8,6 +8,7 @@ class Pandemosa {
         this.network = new Network("http://127.0.0.1:8080");
         this.session = null;
         this.current_date = new Date();
+        this.menu = null;
 
     }
 
@@ -132,6 +133,10 @@ class Pandemosa {
 
         if (this.obj)
             this.obj.remove();
+        if (this.menu) {
+            this.menu.destroy();
+            this.menu = null;
+        }
 
         this.obj = document.createElement("div");
         let lines = document.createElement("div");
@@ -178,39 +183,13 @@ class Pandemosa {
 
     displayWelcome() {
         this.obj = document.createElement("div");
-        let menu = document.createElement("div");
-        let button_start = document.createElement("button");
-        let button_continue = document.createElement("button");
-
-        button_start.innerText = "New game";
-        button_continue.innerText = "Continue";
-
         this.obj.id = "pandemosa";
-        menu.id = "welcome_menu";
-        button_start.id = "welcome_start";
-        button_continue.id = "welcome_continue";
-
-        let session = localStorage.getItem("session");
-        if (session) {
-            button_continue.addEventListener("click", (e) => {
-                this.displayGame();
-                this.loadGame(session);
-            })
-        } else {
-            button_continue.classList.add("unselect")
-        }
-
-        button_start.addEventListener("click", (e) => {
-            this.displayGame();
-            this.createNewGame();
-        })
-
-        menu.appendChild(button_start)
-        menu.appendChild(button_continue)
-        this.obj.appendChild(menu)
-
         document.body.appendChild(this.obj);
-
+        this.menu  = new Menu(
+            this,
+            Math.random() * 10000 % (document.body.clientWidth - 200),
+            Math.random() * 10000 % (window.screen.height - 200)
+        );
     }
 
 }

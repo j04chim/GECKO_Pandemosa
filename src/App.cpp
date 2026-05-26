@@ -126,15 +126,15 @@ void App::run() {
 
             std::string ct_good;
             for (char c: ct_ugly) {
-                if (c == '\n')
+                if (c == '\n' || c == '\r') {
                     ct_good += "\\n";
-                else if (c == '"')
-                    ct_good += "\"";
-                else
+                } else if (c == '"') {
+                    ct_good += "\\\"";
+                }
+                else {
                     ct_good += c;
+                }
             }
-
-            printf("-------- %s ----------", ct_good.c_str());
 
             Note n = this->_database->insertNote(
                 sd,
@@ -289,20 +289,15 @@ void App::run() {
 
             std::string ct_good;
             for (char c: ct_ugly) {
-                printf("-- %c\n", c);
                 if (c == '\n' || c == '\r') {
                     ct_good += "\\n";
-                    printf(" - \\n\n");
                 } else if (c == '"') {
                     ct_good += "\\\"";
-                    printf(" - \"\n");
                 }
                 else {
                     ct_good += c;
                 }
             }
-
-            printf("-------- %s ----------", ct_good.c_str());
 
             this->_database->updateNote(
                 nid,
