@@ -18,6 +18,7 @@ class Pandemosa {
         let month = parseInt(this.session.ingame_date.split("-")[1]);
         let year = parseInt(this.session.ingame_date.split("-")[0]);
         this.current_date = new Date(year, month, day);
+        localStorage.setItem("session", this.session.id);
 
     }
 
@@ -28,7 +29,7 @@ class Pandemosa {
         let month = parseInt(this.session.ingame_date.split("-")[1]);
         let year = parseInt(this.session.ingame_date.split("-")[0]);
         this.current_date = new Date(year, month, day);
-        console.log(this.session);
+        localStorage.setItem("session", this.session.id);
 
     }
 
@@ -127,7 +128,10 @@ class Pandemosa {
         this.loadTimeline();
     }
 
-    display() {
+    displayGame() {
+
+        if (this.obj)
+            this.obj.remove();
 
         this.obj = document.createElement("div");
         let lines = document.createElement("div");
@@ -137,12 +141,15 @@ class Pandemosa {
         let buttons = document.createElement("div");
         let addnote = document.createElement("button");
 
-        addnote.addEventListener("click", (e) => {
+        addnote.addEventListener("click", async (e) => {
+            let note = await this.network.createNote({tt: "", ct: ""});
+            console.log(note);
             new Note(
                 "",
                 Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,
                 Math.random() * 10000 % (window.screen.height - 300),
-                this.network
+                this.network,
+                note.id
             );
         });
         document.addEventListener("mousemove", (e) => {
@@ -164,6 +171,43 @@ class Pandemosa {
         this.obj.appendChild(events);
         this.obj.appendChild(timeline);
         this.obj.appendChild(buttons);
+
+        document.body.appendChild(this.obj);
+
+    }
+
+    displayWelcome() {
+        this.obj = document.createElement("div");
+        let menu = document.createElement("div");
+        let button_start = document.createElement("button");
+        let button_continue = document.createElement("button");
+
+        button_start.innerText = "New game";
+        button_continue.innerText = "Continue";
+
+        this.obj.id = "pandemosa";
+        menu.id = "welcome_menu";
+        button_start.id = "welcome_start";
+        button_continue.id = "welcome_continue";
+
+        let session = localStorage.getItem("session");
+        if (session) {
+            button_continue.addEventListener("click", (e) => {
+                this.displayGame();
+                this.loadGame(session);
+            })
+        } else {
+            button_continue.classList.add("unselect")
+        }
+
+        button_start.addEventListener("click", (e) => {
+            this.displayGame();
+            this.createNewGame();
+        })
+
+        menu.appendChild(button_start)
+        menu.appendChild(button_continue)
+        this.obj.appendChild(menu)
 
         document.body.appendChild(this.obj);
 

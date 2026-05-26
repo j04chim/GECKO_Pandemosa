@@ -112,6 +112,10 @@ void App::run() {
 
             std::string sd =
                 req.url_params.get("sd") ? req.url_params.get("sd") : "";
+            std::string ct_ugly =
+                req.url_params.get("ct") ? req.url_params.get("ct") : "";
+            std::string tt_ugly =
+                req.url_params.get("tt") ? req.url_params.get("tt") : "";
 
             if ( sd == "" ) {
 
@@ -120,10 +124,22 @@ void App::run() {
 
             }
 
+            std::string ct_good;
+            for (char c: ct_ugly) {
+                if (c == '\n')
+                    ct_good += "\\n";
+                else if (c == '"')
+                    ct_good += "\"";
+                else
+                    ct_good += c;
+            }
+
+            printf("-------- %s ----------", ct_good.c_str());
+
             Note n = this->_database->insertNote(
                 sd,
-                req.url_params.get("tt") ? req.url_params.get("tt") : "",
-                req.url_params.get("ct") ? req.url_params.get("ct") : ""
+                tt_ugly,
+                ct_good
             );
 
             response.body = n.toJson();
@@ -261,20 +277,37 @@ void App::run() {
 
             std::string nid =
                 req.url_params.get("nid") ? req.url_params.get("nid") : "";
-            std::string ct =
+            std::string ct_ugly =
                 req.url_params.get("ct") ? req.url_params.get("ct") : "";
 
-            if ( nid == "" || ct == "" ) {
+            if ( nid == "" || ct_ugly == "" ) {
 
                 response.body = "{}";
                 return response;
 
             }
 
+            std::string ct_good;
+            for (char c: ct_ugly) {
+                printf("-- %c\n", c);
+                if (c == '\n' || c == '\r') {
+                    ct_good += "\\n";
+                    printf(" - \\n\n");
+                } else if (c == '"') {
+                    ct_good += "\\\"";
+                    printf(" - \"\n");
+                }
+                else {
+                    ct_good += c;
+                }
+            }
+
+            printf("-------- %s ----------", ct_good.c_str());
+
             this->_database->updateNote(
                 nid,
                 req.url_params.get("tt") ? req.url_params.get("tt") : "",
-                ct
+                ct_good
             );
 
             response.body = "{}";

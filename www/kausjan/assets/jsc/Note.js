@@ -42,7 +42,7 @@ class Line {
 
 class Note {
 
-	constructor(text, x, y, network, id = null) {
+    constructor(text, x, y, network, id = null) {
 
 		this.x = document.body.clientWidth;
 		this.y = (Math.random() * 10000) % window.screen.height;
@@ -66,7 +66,7 @@ class Note {
 		this.button_zoom = document.createElement("button");
         let button_delete = document.createElement("button");
 
-		this.textarea.innerText = text;
+		this.textarea.value = text;
 
 		this.textarea.classList.add("note_text");
 		content.classList.add("note_content");
@@ -111,9 +111,6 @@ class Note {
 		document.getElementById("notes").appendChild(this.obj);
 
 		this.zIndex = this.obj.style.zIndex;
-
-        if (this.id == null)
-            this.id = this.network.createNote({tt: "", ct: text}).id;
 
 		this.moveto(x, y, 60)
         this.loaded = true;

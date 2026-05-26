@@ -19,7 +19,7 @@ class Network {
 		return res.json();
 	}
 
-	getEvents({ id, dt, dl, dr, ul } = {}) {
+	async getEvents({ id, dt, dl, dr, ul } = {}) {
 		const url = this.buildUrl('/getEvents', {
 			id,
 			dt,
@@ -27,25 +27,26 @@ class Network {
 			dr,
 			ul
 		});
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	createSession(params = {}) {
+	async createSession(params = {}) {
 		const url = this.buildUrl('/createSession');
-        let json = this.getJson(url);
+        let json = await this.getJson(url);
         this.sid = json.id;
+        console.log(json)
 		return json;
 	}
 
-	getSession(id) {
+	async getSession(id) {
 		if (id === undefined || id === null)
 			return Promise.reject(new Error('id is required'));
 		const url = this.buildUrl('/getSession', { id });
         this.sid = id;
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	createNote({ sd = this.sid, tt, ct } = {}) {
+	async createNote({ sd = this.sid, tt, ct } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/createNote', {
@@ -53,10 +54,10 @@ class Network {
 			tt,
 			ct
 		});
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	createNoteLink({ sd = this.sid, na, nb } = {}) {
+	async createNoteLink({ sd = this.sid, na, nb } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/createNoteLink', {
@@ -64,28 +65,28 @@ class Network {
 			na,
 			nb
 		});
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	getNoteLink({ sd = this.sid } = {}) {
+	async getNoteLink({ sd = this.sid } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/getNoteLink', {
 			sd
 		});
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	deleteNote({ nid } = {}) {
+	async deleteNote({ nid } = {}) {
 		if (!nid)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/deleteNote', {
 			nid,
 		});
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	updateNote({ nid, tt, ct } = {}) {
+	async updateNote({ nid, tt, ct } = {}) {
 		if (!nid)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/updateNote', {
@@ -93,17 +94,17 @@ class Network {
 			tt,
 			ct
 		});
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	getNotes({sd = this.sid} = {}) {
+	async getNotes({sd = this.sid} = {}) {
 		if (sd === undefined || sd === null)
 			return Promise.reject(new Error('sessionId is required'));
 		const url = this.buildUrl('/getNotes', { sd });
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 
-	createAction({ sd, rd, ac, ds } = {}) {
+	async createAction({ sd, rd, ac, ds } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		if (!ac)
@@ -114,6 +115,6 @@ class Network {
 			ac,
 			ds
 		});
-		return this.getJson(url);
+		return await this.getJson(url);
 	}
 }
