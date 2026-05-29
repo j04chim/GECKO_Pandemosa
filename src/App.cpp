@@ -41,17 +41,23 @@ App::App( Config& configuration ) {
 
     if ( configuration.get( "driver" ) == "sqlite" )
         this->_database = new Sqlite( configuration );
+    else {
+        logger( 4, "Can't access database, no driver specified in configuration !" );
+        throw;
+    }
 
     std::string port = configuration.get( "port" );
     this->_url = configuration.get( "url" );
 
-    if ( port == "" )
+    if ( port == "" ) {
+        logger( 2, "Selecting default port 8080 as no port has been specified in configuration." );
         this->_port = 8080;
-    else
+    } else
         this->_port = std::stoi( port );
 
 
     if ( this->_url == "" ) {
+        logger( 2, "No URL specified, using local adress 127.0.0.1." );
         this->_url = "http://127.0.0.1:" + port + "/";
     }
 
@@ -71,6 +77,7 @@ void App::run() {
     crow::logger::setHandler(&log);
     auto& cors = this->_app.get_middleware<crow::CORSHandler>();
     cors.global().origin( "*" );
+    this->_app.loglevel(crow::LogLevel::Warning);
 
     CROW_ROUTE(this->_app, "/getEvents").methods(crow::HTTPMethod::Get)
         ([this](const crow::request& req) {

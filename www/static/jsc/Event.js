@@ -1,4 +1,6 @@
-class Event {
+const ReportClick = new Event('ReportClick');
+
+class Report {
 
 	constructor(title, desc, x, y) {
 
@@ -10,6 +12,7 @@ class Event {
 		this.mouseclick = false;
 		this.locked = false;
 		this.weight = (Math.random() * 10) % 15;
+        this.acted = false;
 		if ( this.weight < 6 ) this.weight = 6;
 
 		this.obj = document.createElement("div");
@@ -18,19 +21,19 @@ class Event {
 		let rtitle = document.createElement("h2");
 		let description = document.createElement("p");
 		let footer = document.createElement("div");
-		let button_pass = document.createElement("button");
-		let button_act = document.createElement("button");
+		this.button_pass = document.createElement("button");
+		this.button_act = document.createElement("button");
 		this.button_zoom = document.createElement("button");
 
 		rtitle.innerText = title;
 		description.innerText = desc;
-		button_act.innerText = "Act";
-		button_pass.innerText = "Pass";
+		this.button_act.innerText = "Act";
+		this.button_pass.innerText = "Pass";
 
-		button_act.classList.add("event_button");
-		button_act.classList.add("event_act");
-		button_pass.classList.add("event_button");
-		button_pass.classList.add("event_pass");
+		this.button_act.classList.add("event_button");
+		this.button_act.classList.add("event_act");
+		this.button_pass.classList.add("event_button");
+		this.button_pass.classList.add("event_pass");
 		footer.classList.add("event_footer");
 		rtitle.classList.add("event_title");
 		description.classList.add("event_desc");
@@ -40,12 +43,9 @@ class Event {
         this.button_zoom.classList.add("button");
 		this.obj.classList.add("event");
 
-		this.zoom = this.zoom.bind(this);
-		this.button_zoom.addEventListener("click", this.zoom);
-
 		header.appendChild(this.button_zoom);
-		footer.appendChild(button_act);
-		footer.appendChild(button_pass);
+		footer.appendChild(this.button_act);
+		footer.appendChild(this.button_pass);
 		content.appendChild(rtitle);
 		content.appendChild(description);
 
@@ -57,11 +57,17 @@ class Event {
 		this.click = this.click.bind(this);
 		this.release = this.release.bind(this);
 		this.moveto = this.moveto.bind(this);
+        this.act = this.act.bind(this);
+        this.pass = this.pass.bind(this);
+        this.zoom = this.zoom.bind(this);
 
 		this.obj.style.left =  "-500px";
 		this.obj.style.top = "-500px";
 		this.obj.style.rotate = "0deg";
 
+		this.button_zoom.addEventListener("click", this.zoom);
+        this.button_act.addEventListener("click", this.act);
+        this.button_pass.addEventListener("click", this.pass);
 		this.obj.addEventListener("mousemove", this.mousemoveto);
 		this.obj.addEventListener("mousedown", this.click);
 		this.obj.addEventListener("mouseup", this.release);
@@ -202,6 +208,26 @@ class Event {
 			this.locked = false;
 		}
 	}
+
+	act() {
+        if (!this.acted) {
+            document.dispatchEvent(ReportClick);
+            this.acted = true;
+            this.obj.style.backgroundColor = "green";
+            this.button_pass.remove();
+            this.button_act.remove();
+        }
+    }
+
+    pass() {
+        if (!this.acted) {
+            document.dispatchEvent(ReportClick);
+            this.acted = true;
+            this.obj.style.backgroundColor = "red";
+            this.button_pass.remove();
+            this.button_act.remove();
+        }
+    }
 
 	destroy() {
 		this.obj.remove();

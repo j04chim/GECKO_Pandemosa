@@ -43,11 +43,16 @@ html {
 	transition: rotate 0.3s cubic-bezier(0.33, 1.49, 0.98, 0.99);
 }
 
+.event_disable {
+    filter: grayscale(100%);
+}
+
 .event_button {
-  border: black 2px solid;
-	width: 100%;
-	height: 50px;
-	margin: 10px;
+    border: black 2px solid;
+    width: 100%;
+    height: 50px;
+    margin: 10px;
+    transition: transform 0.5s;
 }
 
 .event_act, #welcome_start {
@@ -56,6 +61,10 @@ html {
 
 .event_pass, #welcome_continue {
 	background-color: red;
+}
+
+.event_button:hover {
+    transform: scale(1.1);
 }
 
 .event_footer {

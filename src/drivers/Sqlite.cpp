@@ -8,7 +8,16 @@ Sqlite::Sqlite( Config& configuration ) {
     char *zErrMsg = 0;
     int rc;
 
-    rc = sqlite3_open( configuration.get( "database" ).c_str(), &this->_db );
+    std::string db_path = configuration.get( "database" );
+
+    if (db_path == "") {
+
+        logger(4, "Can't find database value in configuration !");
+        throw;
+
+    }
+
+    rc = sqlite3_open( db_path.c_str(), &this->_db );
 
     if( rc ) {
 

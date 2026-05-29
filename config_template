@@ -1,4 +1,4 @@
 port=8080
 driver=sqlite
 database=../../data/sqlite.db
-templates=../www/kausjan/
+url=http://127.0.0.1/

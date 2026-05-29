@@ -10,6 +10,9 @@ class Pandemosa {
         this.current_date = new Date();
         this.menu = null;
 
+        this.nbReport = 0;
+        this.skipSpeed = 1000;
+
     }
 
     async newSession() {
@@ -34,12 +37,12 @@ class Pandemosa {
 
     }
 
-    async loadEvents() {
+    async loadReports() {
 
         let events = await this.network.getEvents({dt: this.session.ingame_date});
         for ( let i = 0; i < events.Events.length; ++i ) {
             this.events.push(
-                new Event(
+                new Report(
                     events.Events[i].title,
                     events.Events[i].summary,
                     Math.random() * 10000 % (document.body.clientWidth/2 - 300),
@@ -47,6 +50,7 @@ class Pandemosa {
                 )
             );
         }
+        this.nbReport = events.Events.length;
 
     }
 
@@ -102,7 +106,7 @@ class Pandemosa {
         this.events = [];
         for ( let i = 0; i < events.Events.length; ++i ) {
             this.events.push(
-                new Event(
+                new Report(
                     events.Events[i].title,
                     events.Events[i].summary,
                     Math.random() * 10000 % (document.body.clientWidth/2 - 300),
@@ -110,21 +114,26 @@ class Pandemosa {
                 )
             );
         }
-    }
-
-    listenerEventAction() {
-
+        this.nbReport = events.Events.length;
+        if (this.events.length == 0) {
+            setTimeout( () => {
+                this.skipSpeed /= 2;
+                this.nextDay();
+            }, this.skipSpeed );
+        } else {
+            this.skipSpeed = 1000;
+        }
     }
 
     async createNewGame() {
         await this.newSession();
-        await this.loadEvents();
+        await this.loadReports();
         this.loadTimeline();
     }
 
     async loadGame(id) {
         await this.loadSession(id);
-        await this.loadEvents();
+        await this.loadReports();
         await this.loadNotes();
         this.loadTimeline();
     }
@@ -179,17 +188,34 @@ class Pandemosa {
 
         document.body.appendChild(this.obj);
 
+        document.addEventListener("ReportClick", () => {
+            console.log(this.nbReport);
+            if (this.nbReport - 1 == 0) {
+                this.nextDay();
+            } else {
+                this.nbReport--;
+            }
+        })
+
     }
 
     displayWelcome() {
         this.obj = document.createElement("div");
         this.obj.id = "pandemosa";
         document.body.appendChild(this.obj);
-        this.menu  = new Menu(
-            this,
-            Math.random() * 10000 % (document.body.clientWidth - 200),
-            Math.random() * 10000 % (window.screen.height - 200)
-        );
+        let thirdx = document.body.clientWidth / 3;
+        let thirdy = window.screen.height / 3;
+        let mx = Math.random() * 10000 % (document.body.clientWidth);
+        let my = Math.random() * 10000 % (window.screen.height);
+        if (mx < thirdx)
+            mx = thirdx;
+        if (mx > thirdx * 2)
+            mx = thirdx * 2;
+        if (my < thirdy)
+            my = thirdy;
+        if (my > thirdy * 2)
+            my = thirdy * 2;
+        this.menu  = new Menu(this, mx, my);
     }
 
 }

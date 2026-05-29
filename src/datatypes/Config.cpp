@@ -25,7 +25,7 @@ int Config::parse( std::string path ) {
         this->_values.push_back(value);
 
         logger(
-            1, ("Added key " + key + " with value " + value +
+            0, ("Added key " + key + " with value " + value +
             " to configuration").c_str()
         );
 
@@ -47,7 +47,7 @@ std::string Config::get( std::string s ) {
 
     }
 
-    logger( 3, ("Could not find key \"" + s + "\" in configuration").c_str() );
+    logger( 2, ("Could not find key \"" + s + "\" in configuration").c_str() );
     return "";
 
 }
@@ -59,7 +59,7 @@ std::string Config::get( int i ) {
         return this->_values[i];
 
     logger(
-        3, ("Could not find value at index \"" + std::to_string(i) +
+        2, ("Could not find value at index \"" + std::to_string(i) +
         "\" in configuration").c_str()
     );
     return "";
