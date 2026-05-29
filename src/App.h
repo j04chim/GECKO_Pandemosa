@@ -32,5 +32,7 @@ class App {
         Database* _database;
         crow::App<crow::CORSHandler> _app;
         int _port;
+        std::string _templates;
+        std::string _url;
 
 };

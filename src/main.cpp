@@ -3,6 +3,7 @@
 #include "logger.h"
 #include "App.h"
 
+
 void display_help() {
 
     printf( "Kausjan - Pandemic simulation game\n" );

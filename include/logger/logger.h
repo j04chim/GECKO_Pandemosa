@@ -9,9 +9,10 @@
  * and 3 (highest).
  * The log level of the program is defined at compile time with LOG_LEVEL (eg.
  * -DLOG_LEVEL=2).
- * 0 -> info
- * 1 -> warn
- * 2 -> error
- * 3 -> fatal
+ * 0 -> debug
+ * 1 -> info
+ * 2 -> warn
+ * 3 -> error
+ * 4 -> fatal
  */
 void logger( int level, const char* message );

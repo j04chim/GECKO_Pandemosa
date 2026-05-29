@@ -1,8 +1,40 @@
 #include <ctime>
+#include <dirent.h>
 
 #include "App.h"
 #include "logger.h"
 #include "drivers/Sqlite.h"
+
+
+class reLogger : public crow::ILogHandler {
+
+public:
+
+    reLogger() {}
+    void log(const std::string& message, crow::LogLevel level) {
+
+        switch (level)
+            {
+            case crow::LogLevel::Debug:
+                    logger(0, message.c_str());
+                    break;
+                case crow::LogLevel::Info:
+                    logger(1, message.c_str());
+                    break;
+                case crow::LogLevel::Warning:
+                    logger(2, message.c_str());
+                    break;
+                case crow::LogLevel::Error:
+                    logger(3, message.c_str());
+                    break;
+                case crow::LogLevel::Critical:
+                    logger(4, message.c_str());
+                    break;
+            }
+
+    }
+
+};
 
 
 App::App( Config& configuration ) {
@@ -11,11 +43,17 @@ App::App( Config& configuration ) {
         this->_database = new Sqlite( configuration );
 
     std::string port = configuration.get( "port" );
+    this->_url = configuration.get( "url" );
 
     if ( port == "" )
         this->_port = 8080;
     else
-        this->_port = std::stoi(port);
+        this->_port = std::stoi( port );
+
+
+    if ( this->_url == "" ) {
+        this->_url = "http://127.0.0.1:" + port + "/";
+    }
 
 }
 
@@ -29,8 +67,10 @@ App::~App() {
 
 void App::run() {
 
-	auto& cors = this->_app.get_middleware<crow::CORSHandler>();
-	cors.global().origin("*");
+    reLogger log;
+    crow::logger::setHandler(&log);
+    auto& cors = this->_app.get_middleware<crow::CORSHandler>();
+    cors.global().origin( "*" );
 
     CROW_ROUTE(this->_app, "/getEvents").methods(crow::HTTPMethod::Get)
         ([this](const crow::request& req) {
@@ -351,6 +391,13 @@ void App::run() {
             response.body = res;
             return response;
 
+    });
+
+    CROW_ROUTE(this->_app, "/")
+        ([this](const crow::request& req) {
+        auto page = crow::mustache::load("index.html");
+        crow::mustache::context ctx ({{"url", this->_url}});
+        return page.render(ctx);
     });
 
     this->_app.port(this->_port).run();

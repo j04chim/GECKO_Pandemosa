@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pandemosa - GECKO Institute</title>
+<!--        <link rel="icon" href="logo.ico">
+        <link rel="apple-touch-icon" href="logo.png">-->
+        <link rel="stylesheet" href="/static/css/style.css">
+	</head>
+	<body>
+
+		<script src="/static/jsc/Network.js"></script>
+		<script src="/static/jsc/Note.js"></script>
+		<script src="/static/jsc/Event.js"></script>
+		<script src="/static/jsc/Timeline.js"></script>
+		<script src="/static/jsc/Menu.js"></script>
+		<script src="/static/jsc/Pandemosa.js"></script>
+		<script>
+            let pandemosa = new Pandemosa("{{url}}");
+            pandemosa.displayWelcome();
+		</script>
+    </body>
+</html>

@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'Arkipelago';
-  src: url('/assets/fon/arkipelago-font.woff2') format('woff2'),
-       url('/assets/fon/arkipelago-font.woff') format('woff');
+  src: url('/static/fon/arkipelago-font.woff2') format('woff2'),
+       url('/static/fon/arkipelago-font.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -9,8 +9,8 @@
 
 @font-face {
   font-family: 'Bad Comic';
-  src: url('/assets/fon/bad-comic-font.woff2') format('woff2'),
-       url('/assets/fon/bad-comic-font.woff') format('woff');
+  src: url('/static/fon/bad-comic-font.woff2') format('woff2'),
+       url('/static/fon/bad-comic-font.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -93,16 +93,16 @@ html {
 }
 
 .event_zoom, .note_zoom {
-	background-image: url("/assets/pic/zoom.svg");
+	background-image: url("/static/pic/zoom.svg");
 }
 
 .note_delete {
-	background-image: url("/assets/pic/delete.svg");
+	background-image: url("/static/pic/delete.svg");
 }
 
 #addnote {
 	background-color: transparent;
-	background-image: url("/assets/pic/addnote.svg");
+	background-image: url("/static/pic/addnote.svg");
 	background-size: contain;
 	background-repeat: no-repeat;
 	border: none;

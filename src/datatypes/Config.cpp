@@ -8,8 +8,8 @@ int Config::parse( std::string path ) {
     std::ifstream config_file( path );
     if ( !config_file.is_open() ) {
 
-        logger( 3, "Can't open config file" );
-        return 1;
+        logger( 4, "Can't open config file" );
+        throw ;
 
     }
 
@@ -25,13 +25,13 @@ int Config::parse( std::string path ) {
         this->_values.push_back(value);
 
         logger(
-            0, ("Added key " + key + " with value " + value +
+            1, ("Added key " + key + " with value " + value +
             " to configuration").c_str()
         );
 
     }
 
-    logger( 0, "Loaded config file !" );
+    logger( 1, "Loaded config file !" );
 
     return 0;
 
@@ -47,7 +47,7 @@ std::string Config::get( std::string s ) {
 
     }
 
-    logger( 2, ("Could not find key \"" + s + "\" in configuration").c_str() );
+    logger( 3, ("Could not find key \"" + s + "\" in configuration").c_str() );
     return "";
 
 }
@@ -59,7 +59,7 @@ std::string Config::get( int i ) {
         return this->_values[i];
 
     logger(
-        2, ("Could not find value at index \"" + std::to_string(i) +
+        3, ("Could not find value at index \"" + std::to_string(i) +
         "\" in configuration").c_str()
     );
     return "";

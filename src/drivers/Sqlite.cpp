@@ -12,16 +12,16 @@ Sqlite::Sqlite( Config& configuration ) {
 
     if( rc ) {
 
-        logger( 3,
+        logger( 4,
             ( std::string( "Failed to create Sqlite connection! " ) +
             sqlite3_errmsg( this->_db ) ).c_str()
         );
-        this->_loaded = false;
+        throw;
 
     }
 
     this->_loaded = true;
-    logger( 0, "Created Sqlite connection !" );
+    logger( 1, "Created Sqlite connection !" );
 
 }
 
