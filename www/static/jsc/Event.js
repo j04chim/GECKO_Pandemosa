@@ -1,8 +1,6 @@
-const ReportClick = new Event('ReportClick');
-
 class Report {
 
-	constructor(title, desc, x, y) {
+	constructor(title, desc, x, y, id) {
 
 		this.x = -500;
 		this.y = -500;
@@ -10,9 +8,10 @@ class Report {
 		this.old_mouse_x = -1;
 		this.old_mouse_y = -1;
 		this.mouseclick = false;
-		this.locked = false;
+		this.zoomed = false;
 		this.weight = (Math.random() * 10) % 15;
         this.acted = false;
+        this.id = id;
 		if ( this.weight < 6 ) this.weight = 6;
 
 		this.obj = document.createElement("div");
@@ -137,7 +136,7 @@ class Report {
 
         e.preventDefault();
 
-		if ( !this.locked && this.mouseclick ) {
+		if ( !this.zoomed && this.mouseclick ) {
 
 			let mvx = e.pageX - this.old_mouse_x;
 			let mvy = e.pageY - this.old_mouse_y;
@@ -166,8 +165,8 @@ class Report {
 
         e.preventDefault();
 
-		if ( !this.locked ) {
-				this.mouseclick = true;
+		if ( !this.zoomed ) {
+            this.mouseclick = true;
 			this.old_mouse_x = e.pageX;
 			this.old_mouse_y = e.pageY;
 			this.obj.style.zIndex = "999";
@@ -175,26 +174,18 @@ class Report {
 	}
 
 	release(e) {
-		if ( !this.locked ) {
+		if ( !this.zoomed ) {
 			this.mouseclick = false;
 			this.obj.style.zIndex = this.zIndex;
 		}
 	}
 
 	zoom(e) {
-		if ( !this.locked ) {
-			this.locked = true;
+		if ( !this.zoomed ) {
+			this.zoomed = true;
 			this.background = document.createElement("div");
-			this.background.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-			this.background.style.backdropFilter = "blur(10px)";
-			this.background.style.width = "200vw";
-			this.background.style.height = "200vh";
-			this.background.style.position = "absolute";
-			this.background.style.overflow = "hidden";
-			this.background.style.zIndex = "998";
-			this.background.style.top = "-100px";
-			this.background.style.left = "-100px";
-			this.obj.style.zIndex = "999";
+			this.background.classList.add("background");
+			this.obj.style.zIndex = "500";
 			this.obj.style.left = ((document.body.clientWidth / 2) - 150) + "px";
 			this.obj.style.top = ((window.screen.height / 2) - 250) + "px";
 			this.obj.style.rotate = "0deg";
@@ -205,23 +196,63 @@ class Report {
 			this.obj.style.left = this.x + "px";
 			this.obj.style.top = this.y + "px";
 			this.obj.style.rotate = this.rotation + "deg";
-			this.locked = false;
+			this.zoomed = false;
 		}
 	}
 
 	act() {
         if (!this.acted) {
-            document.dispatchEvent(ReportClick);
-            this.acted = true;
-            this.obj.style.backgroundColor = "green";
-            this.button_pass.remove();
-            this.button_act.remove();
+			let background = document.createElement("div");
+			background.classList.add("background");
+            background.style.zIndex = 998;
+            let action = ["lockdown", "vaccination", "speech", "meeting",
+            "press conference", "army", "mask", "taxes", "leave"];
+            let buttons_foreach_line = action.length / 3;
+            let line_nb_button = 0;
+            let tiles = document.createElement("table");
+            tiles.classList.add("tile");
+            let line = document.createElement("tr");
+            action.forEach((a) => {
+                let tdata = document.createElement("td");
+                tdata.classList.add("tile_button");
+                tdata.innerText = a;
+                tdata.addEventListener("click", (e) => {
+                    document.dispatchEvent(new CustomEvent('ReportClick', {
+                        bubbles: true,
+                        detail: { action: a, id: this.id },
+                    }));
+                    tiles.remove();
+                    background.remove();
+                    this.acted = true;
+                    this.obj.style.backgroundColor = "green";
+                    this.button_pass.remove();
+                    this.button_act.remove();
+                })
+                line.appendChild(tdata);
+                line_nb_button++;
+                if (line_nb_button >= buttons_foreach_line) {
+                    tiles.appendChild(line);
+                    line = document.createElement("tr");
+                    line_nb_button = 0;
+                }
+            });
+            background.addEventListener("click", (e) => {
+                tiles.remove();
+                background.remove();
+            })
+            document.body.appendChild(tiles);
+            document.getElementById("events").appendChild(background);
+            window.getComputedStyle(tiles).opacity;
+
         }
     }
 
     pass() {
         if (!this.acted) {
-            document.dispatchEvent(ReportClick);
+            document.dispatchEvent(new CustomEvent('ReportClick', {
+                bubbles: true,
+                detail: { action: "pass", id: this.id },
+            }));
             this.acted = true;
             this.obj.style.backgroundColor = "red";
             this.button_pass.remove();
@@ -230,6 +261,8 @@ class Report {
     }
 
 	destroy() {
+        if (this.background)
+            this.background.remove()
 		this.obj.remove();
 	}
 

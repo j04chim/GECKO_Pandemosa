@@ -104,7 +104,7 @@ class Network {
 		return await this.getJson(url);
 	}
 
-	async createAction({ sd, rd, ac, ds } = {}) {
+	async createAction({ sd = this.sid, rd, ac, ds } = {}) {
 		if (!sd)
 			return Promise.reject(new Error('sessionId is required'));
 		if (!ac)

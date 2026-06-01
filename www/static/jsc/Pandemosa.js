@@ -13,6 +13,9 @@ class Pandemosa {
         this.nbReport = 0;
         this.skipSpeed = 1000;
 
+        this.actions = [];
+        this.action_report = [];
+
     }
 
     async newSession() {
@@ -46,7 +49,8 @@ class Pandemosa {
                     events.Events[i].title,
                     events.Events[i].summary,
                     Math.random() * 10000 % (document.body.clientWidth/2 - 300),
-                    Math.random() * 10000 % (window.screen.height - 600)
+                    Math.random() * 10000 % (window.screen.height - 600),
+                    events.Events[i].id
                 )
             );
         }
@@ -97,6 +101,10 @@ class Pandemosa {
     }
 
     async nextDay() {
+        this.action_report.forEach((e) => {
+            e.destroy();
+        })
+        this.action_report = [];
         this.timeline.next();
         this.current_date.setDate(this.current_date.getDate() + 1);
         let events = await this.network.getEvents({dt: this.current_date.getFullYear() + "-" + String(this.current_date.getMonth()).padStart(2, "0") + "-" + String(this.current_date.getDate()).padStart(2, "0")});
@@ -110,7 +118,8 @@ class Pandemosa {
                     events.Events[i].title,
                     events.Events[i].summary,
                     Math.random() * 10000 % (document.body.clientWidth/2 - 300),
-                    Math.random() * 10000 % (window.screen.height - 600)
+                    Math.random() * 10000 % (window.screen.height - 600),
+                    events.Events[i].id
                 )
             );
         }
@@ -122,6 +131,21 @@ class Pandemosa {
             }, this.skipSpeed );
         } else {
             this.skipSpeed = 1000;
+            this.actions.forEach((e) => {
+                let tmp = new Report(
+                    "Action applied",
+                    "You did " + e,
+                    Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,
+                    Math.random() * 10000 % (window.screen.height - 300),
+                    -1
+                );
+                tmp.button_pass.remove();
+                tmp.button_act.remove();
+                this.action_report.push(
+                    tmp
+                );
+            })
+            this.actions = [];
         }
     }
 
@@ -157,7 +181,6 @@ class Pandemosa {
 
         addnote.addEventListener("click", async (e) => {
             let note = await this.network.createNote({tt: "", ct: ""});
-            console.log(note);
             new Note(
                 "",
                 Math.random() * 10000 % (document.body.clientWidth/2 - 200) + document.body.clientWidth/2,
@@ -188,8 +211,10 @@ class Pandemosa {
 
         document.body.appendChild(this.obj);
 
-        document.addEventListener("ReportClick", () => {
-            console.log(this.nbReport);
+        document.addEventListener("ReportClick", (e) => {
+            if (e.detail.action != "pass")
+                this.actions.push(e.detail.action);
+            this.network.createAction({rd: e.detail.id, ac: e.detail.action});
             if (this.nbReport - 1 == 0) {
                 this.nextDay();
             } else {
