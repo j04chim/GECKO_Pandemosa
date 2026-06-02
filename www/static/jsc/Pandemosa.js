@@ -60,7 +60,16 @@ class Pandemosa {
 
     loadTimeline() {
 
-        this.timeline = new Timeline(this.session.ingame_date, 10);
+        let day = parseInt(this.session.ingame_date.split("-")[2]);
+		let month = parseInt(this.session.ingame_date.split("-")[1]);
+		let year = parseInt(this.session.ingame_date.split("-")[0]);
+		let current = new Date(year, month, day);
+        let start = new Date(2019, 12, 31);
+
+
+        this.timeline = new Timeline(this.session.ingame_date, 10,
+            Math.round((current - start) / (1000 * 3600 * 24),0)
+        );
 
     }
 

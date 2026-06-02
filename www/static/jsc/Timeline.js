@@ -8,8 +8,8 @@ class Tick {
 		this.obj.innerText = label;
 		let timeline = document.getElementById("timeline");
 		timeline.appendChild(this.obj);
-		this.obj.style.left = x + "px";
-		this.obj.style.top = y + "px";
+		this.obj.style.left = x + "vw";
+		this.obj.style.top = y + "vh";
 		this.o_x = x;
 		this.o_y = y;
 		this.size = size;
@@ -19,16 +19,16 @@ class Tick {
 
 	moveright(nb) {
 		this.o_x += (nb * (this.size / this.nb_of_ticks))
-		this.obj.style.left = this.o_x + "px";
+		this.obj.style.left = this.o_x + "vw";
 	}
 
 	select() {
-		this.obj.style.border = "solid 2px red";
+		this.obj.style.boxShadow = "0 0 10px 0px red";
 		return this;
 	}
 
 	unselect() {
-		this.obj.style.border = "solid 2px transparent";
+        this.obj.style.boxShadow = "";
 	}
 
 	getDate() {
@@ -43,20 +43,23 @@ class Tick {
 
 class Timeline {
 
-	constructor(start, ticks) {
+	constructor(start, ticks, days) {
 		let day = parseInt(start.split("-")[2]);
 		let month = parseInt(start.split("-")[1]);
 		let year = parseInt(start.split("-")[0]);
 		this.ticks = ticks;
 		this.current = new Date(year, month, day);
-		this.day = 0;
+		this.day = days - ticks / 2;
 
 		this.obj = document.createElement("div");
+        let shadow = document.createElement("div");
 		this.obj.classList.add("timeline_text");
-		this.obj.style.top = window.screen.height - 200 + "px";
-		this.obj.style.left = 50 + "px";
+        shadow.classList.add("timeline_shadow");
+		this.obj.style.top = 88 + "vh";
+		this.obj.style.left = 3 + "vw";
 		this.obj.innerText = this.current.toDateString();
 		let timeline = document.getElementById("timeline");
+        timeline.appendChild(shadow);
 		timeline.appendChild(this.obj);
 
 		this.current.setDate(this.current.getDate() - ticks / 2 - 1);
@@ -76,7 +79,7 @@ class Timeline {
 
 	next() {
 		this.current.setDate(this.current.getDate() + 1);
-		let tmp = new Tick(this.ticks, this.day, this.current, document.body.clientWidth - 100, 50, window.screen.height - 150);
+		let tmp = new Tick(this.ticks, this.day, this.current, 90, 3, 93);
 		this.time.push(tmp);
 		this.day++;
 		if ( this.time[0] == 0 ) {
