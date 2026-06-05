@@ -190,6 +190,9 @@ class Report {
 			this.obj.style.top = ((window.screen.height / 2) - 250) + "px";
 			this.obj.style.rotate = "0deg";
 			document.getElementById("events").appendChild(this.background);
+            this.background.addEventListener("click", (e) => {
+                this.zoom();
+            });
 		} else {
 			this.background.remove();
 			this.obj.style.zIndex = this.zIndex;

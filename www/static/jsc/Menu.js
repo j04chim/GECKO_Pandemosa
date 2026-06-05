@@ -16,9 +16,11 @@ class Menu {
         this.obj = document.createElement("div");
         let button_start = document.createElement("button");
         let button_continue = document.createElement("button");
+        let title = document.createElement("h1");
 
         button_start.innerText = "New game";
         button_continue.innerText = "Continue";
+        title.innerText = "Pandemosa";
 
         this.obj.id = "welcome_menu";
         button_start.id = "welcome_start";
@@ -31,7 +33,7 @@ class Menu {
                 this.pandemosa.loadGame(session);
             })
         } else {
-            button_continue.classList.add("unselect")
+            button_continue.disabled = true;
         }
 
         button_start.addEventListener("click", (e) => {
@@ -43,6 +45,7 @@ class Menu {
 		this.obj.style.top = "-500px";
 		this.obj.style.rotate = "0deg";
 
+        this.obj.appendChild(title);
         this.obj.appendChild(button_start);
         this.obj.appendChild(button_continue);
 

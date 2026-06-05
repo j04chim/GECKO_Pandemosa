@@ -235,6 +235,9 @@ class Note {
 				e.setEnd(((document.body.clientWidth / 2) - 150), ((window.screen.height / 2) - 250))
 			});
 			document.getElementById("events").appendChild(this.background);
+            this.background.addEventListener("click", (e) => {
+                this.zoom();
+            });
 		} else {
 			this.background.remove();
 			this.obj.style.zIndex = this.zIndex;
@@ -278,6 +281,8 @@ class Note {
             e.destroy();
         });
         this.obj.remove();
+        if (this.background)
+            this.background.remove();
         this.network.deleteNote({nid: this.id});
     }
 
