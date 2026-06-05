@@ -5,7 +5,7 @@ class Pandemosa {
         this.events = [];
         this.notes = [];
         this.timeline = null;
-        this.network = new Network("http://127.0.0.1:8080");
+        this.network = new Network(url);
         this.session = null;
         this.current_date = new Date();
         this.menu = null;

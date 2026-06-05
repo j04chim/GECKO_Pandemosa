@@ -402,7 +402,7 @@ void App::run() {
 
     CROW_ROUTE(this->_app, "/")
         ([this](const crow::request& req) {
-        auto page = crow::mustache::load("index.html");
+        auto page = crow::mustache::load_unsafe("index.html");
         crow::mustache::context ctx ({{"url", this->_url}});
         return page.render(ctx);
     });

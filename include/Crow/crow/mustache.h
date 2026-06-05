@@ -240,14 +240,15 @@ namespace crow // NOTE: Already documented in "crow/app.h"
                 {
                     switch (*it)
                     {
-                        case '&': out += "&amp;"; break;
-                        case '<': out += "&lt;"; break;
-                        case '>': out += "&gt;"; break;
-                        case '"': out += "&quot;"; break;
-                        case '\'': out += "&#39;"; break;
-                        case '/': out += "&#x2F;"; break;
-                        case '`': out += "&#x60;"; break;
-                        case '=': out += "&#x3D;"; break;
+                        // ¯\_(ツ)_/¯, guess we arent escaping today
+                        // case '&': out += "&amp;"; break;
+                        // case '<': out += "&lt;"; break;
+                        // case '>': out += "&gt;"; break;
+                        // case '"': out += "&quot;"; break;
+                        // case '\'': out += "&#39;"; break;
+                        // case '/': out += "&#x2F;"; break;
+                        // case '`': out += "&#x60;"; break;
+                        // case '=': out += "&#x3D;"; break;
                         default: out += *it; break;
                     }
                 }
